@@ -14,7 +14,7 @@
 //! @note In case of infinite number of roots, returns SLE_INFINITE_ROOTS.
 //----------------------------------------------------------
 
-int SolveQuadraticEquation(double a, double b, double c, double *x1, double *x2);
+int SolveQuadraticEquation(const double a, const double b, const double c, double *x1, double *x2);
 
 //----------------------------------------------------------
 //! Solves a linear equation ax + b = 0
@@ -27,4 +27,5 @@ int SolveQuadraticEquation(double a, double b, double c, double *x1, double *x2)
 //!
 //! @note In case of infinite number of roots, returns SLE_INFINITE_ROOTS.
 //----------------------------------------------------------
-int SolveLinearEquation(double a, double b, double *x);
+
+int SolveLinearEquation(const double a, const double b, double *x);
