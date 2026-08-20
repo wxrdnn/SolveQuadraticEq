@@ -8,7 +8,7 @@ const int cMaxLine = 1024;
 void DisplayGreeting()
 {
   printf("%s", "# Solve quadratic equation\n# Made by Chumakov Alexey (c) "
-               "2026\n# ^..^\n\n");
+               "2026\n\n");
   return;
 }
 
@@ -37,16 +37,16 @@ void DisplayOutput(int roots, const double *x1, const double *x2)
 {
   switch (roots)
   {
-  case Two:
+  case krTwo:
     printf("There are two roots:\nx1: %lg\nx2: %lg\n", *x1, *x2);
     break;
-  case One:
+  case krOne:
     printf("There is one root:\nx: %lg\n", *x1);
     break;
-  case Zero:
+  case krZero:
     printf("%s", "There are no roots for this equation\n");
     break;
-  case Infinite:
+  case krInfinite:
     printf("%s", "There are infinite number of roots for this equation\n");
     break;
   default:
@@ -59,4 +59,11 @@ void DisplayOutput(int roots, const double *x1, const double *x2)
 void DisplayInput(const double a, const double b, const double c)
 {
   printf("Solving (%lg) * x2 + (%lg) * x + (%lg)\n", a, b, c);
+}
+
+void DisplayCat()
+{
+  printf("%s",
+         " /\\____/\\\n ( o   o )\n (  =^=  )\n (        )\n (         )\n ( "
+         "         ))))))))))))\n\n");
 }

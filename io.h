@@ -1,8 +1,10 @@
-#ifndef IO
+#ifndef __IO
 
-#define IO
+#define __IO
 
 void DisplayGreeting();
+
+void DisplayCat();
 
 void GetInput(double *a, double *b, double *c);
 

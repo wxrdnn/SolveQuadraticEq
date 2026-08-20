@@ -5,7 +5,6 @@
 const double cEtzEpsilon = 1e-9;
 
 bool EqualToZero(const double x);
-double GetDiscriminant(const double a, const double b, const double c);
 RootsAmount SolveTrueQuadraticEquation(const double a, const double b,
                                        const double c, double *x1, double *x2);
 
@@ -40,35 +39,43 @@ RootsAmount SolveLinearEquation(const double a, const double b, double *x)
   {
     if (EqualToZero(b))
     {
-      return Infinite;
+      return krInfinite;
     }
-    return Zero;
+    return krZero;
   }
   double root = -b / a;
   *x = EqualToZero(root) ? 0 : root;
-  return One;
+  return krOne;
 }
 
 RootsAmount SolveTrueQuadraticEquation(const double a, const double b,
                                        const double c, double *x1, double *x2)
-{ // only when a != 0
+{
+  assert(std::isfinite(a));
+  assert(std::isfinite(b));
+  assert(std::isfinite(c));
+
+  assert(x1 != NULL);
+  assert(x2 != NULL);
+  assert(x1 != x2);
+
   double discriminant = GetDiscriminant(a, b, c);
   if (discriminant < 0)
   {
-    return Zero;
+    return krZero;
   }
   else if (EqualToZero(discriminant))
   {
     double root = -b / 2.0 / a;
     *x1 = EqualToZero(root) ? 0 : root;
-    return One;
+    return krOne;
   }
   double sqrtDiscriminant = sqrt(discriminant);
   double root1 = (-b + sqrtDiscriminant) / 2.0 / a;
   double root2 = (-b - sqrtDiscriminant) / 2.0 / a;
   *x1 = EqualToZero(root1) ? 0 : root1;
   *x2 = EqualToZero(root2) ? 0 : root2;
-  return Two;
+  return krTwo;
 }
 
 bool EqualToZero(const double x)

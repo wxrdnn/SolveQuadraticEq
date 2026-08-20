@@ -1,9 +1,13 @@
-enum RootsAmount // TODO rules to name?
+#ifndef __SOLVE
+
+#define __SOLVE
+
+enum RootsAmount
 {
-  Infinite = -1,
-  Zero = 0,
-  One = 1,
-  Two = 2
+  krInfinite = -1,
+  krZero = 0,
+  krOne = 1,
+  krTwo = 2
 };
 
 //----------------------------------------------------------
@@ -36,3 +40,7 @@ RootsAmount SolveQuadraticEquation(const double a, const double b,
 //----------------------------------------------------------
 
 RootsAmount SolveLinearEquation(const double a, const double b, double *x);
+
+double GetDiscriminant(const double a, const double b, const double c);
+
+#endif
