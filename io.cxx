@@ -1,14 +1,16 @@
 #include "io.h"
 #include "assert.h"
 #include "solve.h"
+#include <cstdio>
 #include <stdio.h>
 
 const int cMaxLine = 1024;
 
 void DisplayGreeting()
 {
-  printf("%s", "# Solve quadratic equation\n# Made by Chumakov Alexey (c) "
-               "2026\n\n");
+  printf("%s",
+         __GREEN "# Solve quadratic equation\n# Made by Chumakov Alexey (c) "
+                 "2026\n\n" __RESET);
   return;
 }
 
@@ -22,14 +24,14 @@ void GetInput(double *a, double *b, double *c)
 
   while (true)
   {
-    printf("%s", "Enter a, b, c separated by space:\n");
+    printf(__GREEN "Enter a, b, c separated by space:\n" __RESET);
     fgets(inputLine, cMaxLine, stdin);
     if (sscanf(inputLine, "%lg %lg %lg", a, b, c) == 3)
     {
       return;
     }
 
-    printf("%s", "Error: Incorrect input.\n\n");
+    printf(__RED "Error: Incorrect input.\n\n" __RESET);
   }
 }
 
@@ -38,19 +40,21 @@ void DisplayOutput(int roots, const double *x1, const double *x2)
   switch (roots)
   {
   case krTwo:
-    printf("There are two roots:\nx1: %lg\nx2: %lg\n", *x1, *x2);
+    printf(__GREEN "There are two roots:\nx1: %lg\nx2: %lg\n" __RESET, *x1,
+           *x2);
     break;
   case krOne:
-    printf("There is one root:\nx: %lg\n", *x1);
+    printf(__YELLOW "There is one root:\nx: %lg\n" __RESET, *x1);
     break;
   case krZero:
-    printf("%s", "There are no roots for this equation\n");
+    printf(__BLUE "There are no roots for this equation\n" __RESET);
     break;
   case krInfinite:
-    printf("%s", "There are infinite number of roots for this equation\n");
+    printf(__CYAN
+           "There are infinite number of roots for this equation\n" __RESET);
     break;
   default:
-    printf("%s", "Invalid number of roots\n");
+    printf("Invalid number of roots\n");
     break;
   }
   return;
@@ -63,7 +67,21 @@ void DisplayInput(const double a, const double b, const double c)
 
 void DisplayCat()
 {
-  printf("%s",
+  printf("%s", __YELLOW
          " /\\____/\\\n ( o   o )\n (  =^=  )\n (        )\n (         )\n ( "
-         "         ))))))))))))\n\n");
+         "         ))))))))))))\n\n" __RESET);
+}
+
+void DisplaySadCat()
+{
+  printf("%s", "          .__....._             _.....__,\n            .\": o "
+               ":':         ;': o :\".\n            `. `-' .'.       .'. `-' "
+               ".'\n              `---'             `---'\n\n    _...----...   "
+               "   ...   ...      ...----..._\n .-'__..-\"\"'----    `.  `\"`  "
+               ".'    ----'\"\"-..__`-.\n'.-'   _.--\"\"\"'       `-._.-'      "
+               " '\"\"\"--._   `-.`\n'  .-\"'                  :               "
+               "   `\"-.  `\n  '   `.              _.'\"'._              .'   "
+               "`\n        `.       ,.-\"'       \"'-.       .'\n          `.  "
+               "                         .'\n            `-._                  "
+               " _.-'\n                `\"'--...___...--'\"`\n```\n");
 }

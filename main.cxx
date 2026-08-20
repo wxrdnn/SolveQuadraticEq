@@ -1,11 +1,9 @@
 #include "io.h"
-#include "myassert.h"
 #include "solve.h"
 
 int main()
 {
-  // TODO assert
-  assert(0);
+  // TODO Input from file
 
   double a = 0, b = 0, c = 0;
   double x1 = 0, x2 = 0;

@@ -1,5 +1,5 @@
 #include "solve.h"
-#include "assert.h"
+#include "myassert.h"
 #include <math.h>
 
 const double cEtzEpsilon = 1e-9;
@@ -11,13 +11,13 @@ RootsAmount SolveTrueQuadraticEquation(const double a, const double b,
 RootsAmount SolveQuadraticEquation(const double a, const double b,
                                    const double c, double *x1, double *x2)
 {
-  assert(std::isfinite(a));
-  assert(std::isfinite(b));
-  assert(std::isfinite(c));
+  ASSERT(std::isfinite(a));
+  ASSERT(std::isfinite(b));
+  ASSERT(std::isfinite(c));
 
-  assert(x1 != NULL);
-  assert(x2 != NULL);
-  assert(x1 != x2);
+  ASSERT(x1 != NULL);
+  ASSERT(x2 != NULL);
+  ASSERT(x1 != x2);
 
   if (EqualToZero(a))
   {
@@ -31,9 +31,9 @@ RootsAmount SolveQuadraticEquation(const double a, const double b,
 
 RootsAmount SolveLinearEquation(const double a, const double b, double *x)
 { // ax + b = 0
-  assert(x != NULL);
-  assert(std::isfinite(a));
-  assert(std::isfinite(b));
+  ASSERT(x != NULL);
+  ASSERT(std::isfinite(a));
+  ASSERT(std::isfinite(b));
 
   if (EqualToZero(a))
   {
@@ -51,13 +51,13 @@ RootsAmount SolveLinearEquation(const double a, const double b, double *x)
 RootsAmount SolveTrueQuadraticEquation(const double a, const double b,
                                        const double c, double *x1, double *x2)
 {
-  assert(std::isfinite(a));
-  assert(std::isfinite(b));
-  assert(std::isfinite(c));
+  ASSERT(std::isfinite(a));
+  ASSERT(std::isfinite(b));
+  ASSERT(std::isfinite(c));
 
-  assert(x1 != NULL);
-  assert(x2 != NULL);
-  assert(x1 != x2);
+  ASSERT(x1 != NULL);
+  ASSERT(x2 != NULL);
+  ASSERT(x1 != x2);
 
   double discriminant = GetDiscriminant(a, b, c);
   if (discriminant < 0)
@@ -85,9 +85,9 @@ bool EqualToZero(const double x)
 
 double GetDiscriminant(const double a, const double b, const double c)
 {
-  assert(std::isfinite(a));
-  assert(std::isfinite(b));
-  assert(std::isfinite(c));
+  ASSERT(std::isfinite(a));
+  ASSERT(std::isfinite(b));
+  ASSERT(std::isfinite(c));
 
   return b * b - 4 * a * c;
 }
