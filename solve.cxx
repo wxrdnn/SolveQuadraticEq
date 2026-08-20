@@ -1,6 +1,5 @@
 #include "solve.h"
 #include "assert.h"
-#include <cmath>
 #include <math.h>
 
 #define ETZ_EPSILON 1e-10
@@ -9,7 +8,8 @@ int EqualToZero(const double x);
 double GetDiscriminant(const double a, const double b, const double c);
 
 int SolveQuadraticEquation(const double a, const double b, const double c,
-                           double *x1, double *x2) {
+                           double *x1, double *x2)
+{
   assert(std::isfinite(a));
   assert(std::isfinite(b));
   assert(std::isfinite(c));
@@ -19,12 +19,18 @@ int SolveQuadraticEquation(const double a, const double b, const double c,
   assert(x1 != x2);
 
   if (EqualToZero(a))
+  {
     return SolveLinearEquation(b, c, x1);
-  else {
+  }
+  else
+  {
     double discriminant = GetDiscriminant(a, b, c);
     if (discriminant < 0)
+    {
       return 0;
-    else if (EqualToZero(discriminant)) {
+    }
+    else if (EqualToZero(discriminant))
+    {
       double root = -b / 2.0 / a;
       *x1 = EqualToZero(root) ? 0 : root;
       return 1;
@@ -38,15 +44,18 @@ int SolveQuadraticEquation(const double a, const double b, const double c,
   }
 }
 
-int SolveLinearEquation(const double a, const double b,
-                        double *x) { // ax + b = 0
+int SolveLinearEquation(const double a, const double b, double *x)
+{ // ax + b = 0
   assert(x != NULL);
   assert(std::isfinite(a));
   assert(std::isfinite(b));
 
-  if (EqualToZero(a)) {
+  if (EqualToZero(a))
+  {
     if (EqualToZero(b))
+    {
       return SLE_INFINITE_ROOTS;
+    }
     return 0;
   }
   double root = -b / a;
@@ -54,6 +63,16 @@ int SolveLinearEquation(const double a, const double b,
   return 1;
 }
 
-int EqualToZero(const double x) { return (fabs(x - 0) < ETZ_EPSILON); }
+int EqualToZero(const double x)
+{
+  return fabs(x) < ETZ_EPSILON;
+}
 
-double GetDiscriminant(const double a, const double b, const double c) { return b * b - 4 * a * c; }
+double GetDiscriminant(const double a, const double b, const double c)
+{
+  assert(std::isfinite(a));
+  assert(std::isfinite(b));
+  assert(std::isfinite(c));
+
+  return b * b - 4 * a * c;
+}
