@@ -7,8 +7,11 @@ int main(int argc, char *argv[]){
     double a = 0, b = 0, c = 0;
     double x1 = 0, x2 = 0;
     printf("%s", "# Solve quadratic equation\n# Made by Chumakov Alexey (c) 2026\n^..^\n\n");
-    printf("%s", "Enter a, b, c:\n");
-    scanf("%lg %lg %lg", &a, &b, &c);
+    printf("%s", "Enter a, b, c separated by space:\n");
+    if (scanf("%lg %lg %lg", &a, &b, &c) != 3){
+        printf("%s", "Error: Incorrect input.\n");
+        return 1;
+    }
     int roots = SolveQuadraticEquation(a, b, c, &x1, &x2);
     switch (roots) {
         case 2:
