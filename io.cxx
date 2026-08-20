@@ -3,6 +3,8 @@
 #include "solve.h"
 #include <stdio.h>
 
+const int cMaxLine = 1024;
+
 void DisplayGreeting()
 {
   printf("%s", "# Solve quadratic equation\n# Made by Chumakov Alexey (c) "
@@ -10,19 +12,25 @@ void DisplayGreeting()
   return;
 }
 
-bool GetInput(double *a, double *b, double *c)
+void GetInput(double *a, double *b, double *c)
 {
   assert(a != NULL);
   assert(b != NULL);
   assert(c != NULL);
 
-  printf("%s", "Enter a, b, c separated by space:\n");
-  if (scanf("%lg %lg %lg", a, b, c) != 3) // TODO repeat input
+  char inputLine[cMaxLine] = {};
+
+  while (true)
   {
-    printf("%s", "Error: Incorrect input.\n");
-    return false;
+    printf("%s", "Enter a, b, c separated by space:\n");
+    fgets(inputLine, cMaxLine, stdin);
+    if (sscanf(inputLine, "%lg %lg %lg", a, b, c) == 3)
+    {
+      return;
+    }
+
+    printf("%s", "Error: Incorrect input.\n\n");
   }
-  return true;
 }
 
 void DisplayOutput(int roots, const double *x1, const double *x2)

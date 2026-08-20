@@ -8,10 +8,7 @@ int main()
 
   DisplayGreeting();
 
-  if (!GetInput(&a, &b, &c))
-  {
-    return 1;
-  }
+  GetInput(&a, &b, &c);
 
   int roots = SolveQuadraticEquation(a, b, c, &x1, &x2);
   DisplayOutput(roots, &x1, &x2);
