@@ -4,8 +4,7 @@
 
 void DisplayGreeting();
 
-//! Returns 0 if input is correct, otherwise 1
-int GetInput(double *a, double *b, double *c);
+bool GetInput(double *a, double *b, double *c);
 
 void DisplayOutput(int roots, const double *x1, const double *x2);
 

@@ -8,7 +8,7 @@ int main()
 
   DisplayGreeting();
 
-  if (GetInput(&a, &b, &c) != 0)
+  if (!GetInput(&a, &b, &c))
   {
     return 1;
   }

@@ -1,4 +1,10 @@
-#define SLE_INFINITE_ROOTS -1
+enum RootsAmount // TODO rules to name?
+{
+  Infinite = -1,
+  Zero = 0,
+  One = 1,
+  Two = 2
+};
 
 //----------------------------------------------------------
 //! Solves a quadratic equation ax2 + bx + c = 0
@@ -14,7 +20,8 @@
 //! @note In case of infinite number of roots, returns SLE_INFINITE_ROOTS.
 //----------------------------------------------------------
 
-int SolveQuadraticEquation(const double a, const double b, const double c, double *x1, double *x2);
+RootsAmount SolveQuadraticEquation(const double a, const double b,
+                                   const double c, double *x1, double *x2);
 
 //----------------------------------------------------------
 //! Solves a linear equation ax + b = 0
@@ -28,4 +35,4 @@ int SolveQuadraticEquation(const double a, const double b, const double c, doubl
 //! @note In case of infinite number of roots, returns SLE_INFINITE_ROOTS.
 //----------------------------------------------------------
 
-int SolveLinearEquation(const double a, const double b, double *x);
+RootsAmount SolveLinearEquation(const double a, const double b, double *x);

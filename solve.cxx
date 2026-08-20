@@ -2,13 +2,15 @@
 #include "assert.h"
 #include <math.h>
 
-#define ETZ_EPSILON 1e-10
+const double cEtzEpsilon = 1e-9;
 
-int EqualToZero(const double x);
+bool EqualToZero(const double x);
 double GetDiscriminant(const double a, const double b, const double c);
+RootsAmount SolveTrueQuadraticEquation(const double a, const double b,
+                                       const double c, double *x1, double *x2);
 
-int SolveQuadraticEquation(const double a, const double b, const double c,
-                           double *x1, double *x2)
+RootsAmount SolveQuadraticEquation(const double a, const double b,
+                                   const double c, double *x1, double *x2)
 {
   assert(std::isfinite(a));
   assert(std::isfinite(b));
@@ -24,27 +26,11 @@ int SolveQuadraticEquation(const double a, const double b, const double c,
   }
   else
   {
-    double discriminant = GetDiscriminant(a, b, c);
-    if (discriminant < 0)
-    {
-      return 0;
-    }
-    else if (EqualToZero(discriminant))
-    {
-      double root = -b / 2.0 / a;
-      *x1 = EqualToZero(root) ? 0 : root;
-      return 1;
-    }
-    double sqrtDiscriminant = sqrt(discriminant);
-    double root1 = (-b + sqrtDiscriminant) / 2.0 / a;
-    double root2 = (-b - sqrtDiscriminant) / 2.0 / a;
-    *x1 = EqualToZero(root1) ? 0 : root1;
-    *x2 = EqualToZero(root2) ? 0 : root2;
-    return 2;
+    return SolveTrueQuadraticEquation(a, b, c, x1, x2);
   }
 }
 
-int SolveLinearEquation(const double a, const double b, double *x)
+RootsAmount SolveLinearEquation(const double a, const double b, double *x)
 { // ax + b = 0
   assert(x != NULL);
   assert(std::isfinite(a));
@@ -54,18 +40,40 @@ int SolveLinearEquation(const double a, const double b, double *x)
   {
     if (EqualToZero(b))
     {
-      return SLE_INFINITE_ROOTS;
+      return Infinite;
     }
-    return 0;
+    return Zero;
   }
   double root = -b / a;
   *x = EqualToZero(root) ? 0 : root;
-  return 1;
+  return One;
 }
 
-int EqualToZero(const double x)
+RootsAmount SolveTrueQuadraticEquation(const double a, const double b,
+                                       const double c, double *x1, double *x2)
+{ // only when a != 0
+  double discriminant = GetDiscriminant(a, b, c);
+  if (discriminant < 0)
+  {
+    return Zero;
+  }
+  else if (EqualToZero(discriminant))
+  {
+    double root = -b / 2.0 / a;
+    *x1 = EqualToZero(root) ? 0 : root;
+    return One;
+  }
+  double sqrtDiscriminant = sqrt(discriminant);
+  double root1 = (-b + sqrtDiscriminant) / 2.0 / a;
+  double root2 = (-b - sqrtDiscriminant) / 2.0 / a;
+  *x1 = EqualToZero(root1) ? 0 : root1;
+  *x2 = EqualToZero(root2) ? 0 : root2;
+  return Two;
+}
+
+bool EqualToZero(const double x)
 {
-  return fabs(x) < ETZ_EPSILON;
+  return fabs(x) < cEtzEpsilon;
 }
 
 double GetDiscriminant(const double a, const double b, const double c)
