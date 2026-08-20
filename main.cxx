@@ -1,7 +1,6 @@
 #include <cassert>
 #include <cmath>
-#include <stdio.h>
-#include <math.h>
+#include <cstdio>
 #include "solve.h"
 
 int main(int argc, char *argv[]){
