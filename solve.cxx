@@ -1,15 +1,15 @@
-#include <cmath>
-#include <math.h>
 #include "solve.h"
 #include "assert.h"
+#include <cmath>
+#include <math.h>
 
-#define EPSILON 1e-10
+#define ETZ_EPSILON 1e-10
 
 int EqualToZero(const double x);
+double GetDiscriminant(const double a, const double b, const double c);
 
-
-int SolveQuadraticEquation(const double a, const double b, const double c, double *x1,
-                           double *x2) {
+int SolveQuadraticEquation(const double a, const double b, const double c,
+                           double *x1, double *x2) {
   assert(std::isfinite(a));
   assert(std::isfinite(b));
   assert(std::isfinite(c));
@@ -21,21 +21,25 @@ int SolveQuadraticEquation(const double a, const double b, const double c, doubl
   if (EqualToZero(a))
     return SolveLinearEquation(b, c, x1);
   else {
-    double discriminant = b * b - 4 * a * c;
-    if (discriminant < 0) // TODO compare to zero func
+    double discriminant = GetDiscriminant(a, b, c);
+    if (discriminant < 0)
       return 0;
     else if (EqualToZero(discriminant)) {
-      *x1 = -b / 2.0 / a;
+      double root = -b / 2.0 / a;
+      *x1 = EqualToZero(root) ? 0 : root;
       return 1;
     }
     double sqrtDiscriminant = sqrt(discriminant);
-    *x1 = (-b + sqrtDiscriminant) / 2.0 / a;
-    *x2 = (-b - sqrtDiscriminant) / 2.0 / a;
+    double root1 = (-b + sqrtDiscriminant) / 2.0 / a;
+    double root2 = (-b - sqrtDiscriminant) / 2.0 / a;
+    *x1 = EqualToZero(root1) ? 0 : root1;
+    *x2 = EqualToZero(root2) ? 0 : root2;
     return 2;
   }
 }
 
-int SolveLinearEquation(const double a, const double b, double *x) { // ax + b = 0
+int SolveLinearEquation(const double a, const double b,
+                        double *x) { // ax + b = 0
   assert(x != NULL);
   assert(std::isfinite(a));
   assert(std::isfinite(b));
@@ -45,11 +49,11 @@ int SolveLinearEquation(const double a, const double b, double *x) { // ax + b =
       return SLE_INFINITE_ROOTS;
     return 0;
   }
-  *x = -b / a;
+  double root = -b / a;
+  *x = EqualToZero(root) ? 0 : root;
   return 1;
 }
 
+int EqualToZero(const double x) { return (fabs(x - 0) < ETZ_EPSILON); }
 
-int EqualToZero(const double x){
-    return (fabs(x - 0) < EPSILON);
-}
+double GetDiscriminant(const double a, const double b, const double c) { return b * b - 4 * a * c; }

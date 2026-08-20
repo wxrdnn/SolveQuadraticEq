@@ -2,7 +2,10 @@
 #include <stdio.h>
 
 void Greeting();
-int GetInput(double *a, double *b, double *c); // Returns 0 if input is correct, otherwise 1
+
+//! Returns 0 if input is correct, otherwise 1
+int GetInput(double *a, double *b, double *c);
+
 void DisplayOutput(int roots, const double *x1, const double *x2);
 
 int main() {
