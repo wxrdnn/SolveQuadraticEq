@@ -1,13 +1,17 @@
 #include "io.h"
+#include "myassert.h"
 #include "solve.h"
 #include <cstdio>
+#include <cstdlib>
 
 void SolveSingle(InputType inputType);
 void SolveCycle();
 
 int main()
 {
-    // TODO Input from file
+    // TODO Test failure number
+    // TODO File output
+    // TODO check double for finite and NaN
 
     DisplayGreeting();
     DisplayCat();
@@ -38,10 +42,29 @@ void SolveCycle()
 
     GetFileName(fileName);
     FILE *fp = fopen(fileName, "r");
-    for (long i = CountLinesOfFile(fp); i > 0; --i)
+    if (fp == NULL)
     {
+        printf(__RED "Error: Can\'t open file \"%s\".\n" __RESET, fileName);
+        exit(EXIT_FAILURE);
+    }
+
+    long fileLength = CountLinesOfFile(fp);
+
+    if (fileLength <= 1)
+    {
+        printf(__RED "Error: File is \"%s\" empty.\n" __RESET, fileName);
+        exit(EXIT_FAILURE);
+    }
+
+    for (long i = fileLength; i > 0; --i)
+    {
+        Polynomial pol = {};
+        if (Get2DegreePolynomialFromFile(fp, &pol, ';') == rFail)
+        {
+            printf(__RED "Error: incorrect file input.\n" __RESET);
+            exit(EXIT_FAILURE);
+        }
         printf("%s", "-------------------------\n");
-        Polynomial pol = Get2DegreePolynomialFromFile(fp);
         DisplayPolynomial(pol);
         DisplayRoots(SolveQuadraticEquation(pol));
     }

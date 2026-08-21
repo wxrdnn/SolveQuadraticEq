@@ -21,21 +21,22 @@ enum InputType
     itFile = 1,
 };
 
-enum ParseResult
+enum Result
 {
-    prSucces = 0,
-    prFail = 1,
+    rSucces = 0,
+    rFail = 1,
 };
 
 Polynomial Get2DegreePolynomial(InputType inputType);
 
 InputType GetInputType();
 
-Polynomial Get2DegreePolynomialFromFile(FILE *fp);
+Result Get2DegreePolynomialFromFile(FILE *fp, Polynomial *pp,
+                                    const char separator);
 
 void GetFileName(char *fileName);
 
-ParseResult ParsePolynomial(const char *s, char separator, Polynomial *pp);
+Result ParsePolynomial(const char *s, char separator, Polynomial *pp);
 
 bool AskForCycleSolve();
 
