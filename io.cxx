@@ -2,13 +2,10 @@
 #include "myassert.h"
 #include "solve.h"
 #include <cstring>
+#include <math.h>
 #include <stdio.h>
 
-const int cMaxLine = 1024;
-
 Polynomial Get2DegreePolynomialFromKeyboard();
-Polynomial Get2DegreePolynomialFromFile(FILE *fp);
-void GetFileName(char *fileName);
 
 Polynomial Get2DegreePolynomialFromKeyboard()
 {
@@ -116,6 +113,24 @@ ParseResult ParsePolynomial(const char *s, char separator, Polynomial *pp)
     return prSucces;
 }
 
+bool AskForCycleSolve()
+{
+    printf(__GREEN "Solve all equations from file, or the first one "
+                   "only:\n0: the first one\n1: all\n\n(default=0)\n" __RESET);
+
+    int input = -1;
+
+    char inputLine[cMaxLine] = {};
+    fgets(inputLine, cMaxLine, stdin);
+
+    if (sscanf(inputLine, "%d", &input) != 1 || (input != 1 && input != 0))
+    {
+        return 0;
+    }
+
+    return input;
+}
+
 void DisplayGreeting()
 {
     printf("%s",
@@ -162,18 +177,24 @@ void DisplayPolynomial(Polynomial pol)
 
     for (int i = pol.coefsAmount; i > 0; --i)
     {
-        if (i > 1)
+        if (i > 2)
         {
-            printf("(%lg) * x%d", pol.coefs[i - 1], i - 1);
-            printf(" + ");
+            printf(pol.coefs[i - 1] > 0 ? "" : "-");
+            printf("%lg*x%d", fabs(pol.coefs[i - 1]), i - 1);
+            printf(pol.coefs[i - 2] > 0 ? " + " : " - ");
+        }
+        else if (i == 2)
+        {
+            printf("%lg*x", fabs(pol.coefs[i - 1]));
+            printf(pol.coefs[i - 2] > 0 ? " + " : " - ");
         }
         else
         {
-            printf("(%lg)", pol.coefs[i - 1]);
+            printf("%lg", fabs(pol.coefs[i - 1]));
         }
     }
 
-    printf(__RESET "\n");
+    printf(" = 0\n" __RESET);
 
     return;
 }
@@ -198,4 +219,20 @@ void DisplaySadCat()
            "`\n        `.       ,.-\"'       \"'-.       .'\n          `.  "
            "                         .'\n            `-._                  "
            " _.-'\n                `\"'--...___...--'\"`\n```\n");
+}
+
+long CountLinesOfFile(FILE *fp)
+{
+    long currentPos = SEEK_CUR;
+    fseek(fp, SEEK_SET, 0);
+
+    char buffer[cMaxLine] = {};
+    long count = 0;
+    while (fgets(buffer, cMaxLine, fp) != NULL)
+    {
+        ++count;
+    }
+
+    fseek(fp, currentPos, 0);
+    return count;
 }

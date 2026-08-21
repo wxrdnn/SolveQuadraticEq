@@ -13,6 +13,8 @@
 #define __CYAN "\x1b[36m"
 #define __RESET "\x1b[0m"
 
+const int cMaxLine = 1024;
+
 enum InputType
 {
     itKeyborad = 0,
@@ -29,7 +31,13 @@ Polynomial Get2DegreePolynomial(InputType inputType);
 
 InputType GetInputType();
 
+Polynomial Get2DegreePolynomialFromFile(FILE *fp);
+
+void GetFileName(char *fileName);
+
 ParseResult ParsePolynomial(const char *s, char separator, Polynomial *pp);
+
+bool AskForCycleSolve();
 
 void DisplayGreeting();
 
@@ -40,5 +48,7 @@ void DisplaySadCat();
 void DisplayRoots(const Roots roots);
 
 void DisplayPolynomial(const Polynomial pol);
+
+long CountLinesOfFile(FILE *fp);
 
 #endif
