@@ -3,18 +3,17 @@
 
 int main()
 {
-  // TODO Input from file
+    // TODO Input from file
 
-  double a = 0, b = 0, c = 0;
-  double x1 = 0, x2 = 0;
+    DisplayGreeting();
+    DisplayCat();
 
-  DisplayGreeting();
-  DisplayCat();
+    InputType inputType = GetInputType();
+    Polynomial pol = Get2DegreePolynomial(inputType);
 
-  GetInput(&a, &b, &c);
+    DisplayPolynomial(pol);
 
-  int roots = SolveQuadraticEquation(a, b, c, &x1, &x2);
-  DisplayOutput(roots, &x1, &x2);
+    DisplayRoots(SolveQuadraticEquation(pol));
 
-  return 0;
+    return 0;
 }

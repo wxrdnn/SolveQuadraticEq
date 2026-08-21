@@ -2,13 +2,21 @@
 
 #define __SOLVE
 
-enum RootsAmount
+const int cInfiniteRootsAmount = -1;
+const int cMaxCoefsAmount = 8;
+const int cMaxRootsAmount = 8;
+
+typedef struct
 {
-  krInfinite = -1,
-  krZero = 0,
-  krOne = 1,
-  krTwo = 2
-};
+    double coefs[cMaxCoefsAmount];
+    int coefsAmount;
+} Polynomial;
+
+typedef struct
+{
+    double roots[cMaxRootsAmount];
+    int rootsAmount;
+} Roots;
 
 //----------------------------------------------------------
 //! Solves a quadratic equation ax2 + bx + c = 0
@@ -24,8 +32,7 @@ enum RootsAmount
 //! @note In case of infinite number of roots, returns SLE_INFINITE_ROOTS.
 //----------------------------------------------------------
 
-RootsAmount SolveQuadraticEquation(const double a, const double b,
-                                   const double c, double *x1, double *x2);
+Roots SolveQuadraticEquation(const Polynomial pol);
 
 //----------------------------------------------------------
 //! Solves a linear equation ax + b = 0
@@ -39,8 +46,8 @@ RootsAmount SolveQuadraticEquation(const double a, const double b,
 //! @note In case of infinite number of roots, returns SLE_INFINITE_ROOTS.
 //----------------------------------------------------------
 
-RootsAmount SolveLinearEquation(const double a, const double b, double *x);
+Roots SolveLinearEquation(const Polynomial pol);
 
-double GetDiscriminant(const double a, const double b, const double c);
+double Get2DegreeDiscriminant(const Polynomial pol);
 
 #endif
