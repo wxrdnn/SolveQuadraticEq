@@ -3,6 +3,7 @@
 #include "h/io.h"
 #include "h/limits.h"
 #include "h/solve.h"
+#include <cstdio>
 #include <cstring>
 
 //! returned ExitCodes are
@@ -32,7 +33,7 @@ Error SolveCycle()
 
     long fileLength = CountLinesOfFile(fp);
 
-    if (fileLength <= 1)
+    if (FileIsEmpty(fp))
     {
         return CreateError(ecFileIsEmpty, fileName);
     }

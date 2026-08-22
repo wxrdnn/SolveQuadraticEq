@@ -242,3 +242,18 @@ void ReplaceNewLineCharWithNullTerminator(char *const s)
     }
     return;
 }
+
+//! works with opened files only
+bool FileIsEmpty(FILE *fp)
+{
+    ASSERT(fp != NULL);
+
+    int c = 0;
+    if ((c = getc(fp)) == EOF)
+    {
+        return true;
+    }
+
+    ungetc(c, fp);
+    return false;
+}

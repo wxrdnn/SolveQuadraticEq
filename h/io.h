@@ -38,4 +38,6 @@ long CountLinesOfFile(FILE *const fp);
 
 void ReplaceNewLineCharWithNullTerminator(char *const s);
 
+bool FileIsEmpty(FILE *fp);
+
 #endif
