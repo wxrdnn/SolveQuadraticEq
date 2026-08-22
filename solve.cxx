@@ -1,5 +1,5 @@
-#include "solve.h"
-#include "myassert.h"
+#include "h/solve.h"
+#include "h/debug.h"
 #include <math.h>
 
 const double cEtzEpsilon = 1e-9;

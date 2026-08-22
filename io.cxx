@@ -1,10 +1,10 @@
-#include "io.h"
-#include "myassert.h"
-#include "solve.h"
-#include <cstdlib>
-#include <cstring>
+#include "h/io.h"
+#include "h/colors.h"
+#include "h/debug.h"
+#include "h/solve.h"
 #include <math.h>
 #include <stdio.h>
+#include <string.h>
 
 Polynomial Get2DegreePolynomialFromKeyboard();
 
@@ -19,16 +19,16 @@ Polynomial Get2DegreePolynomialFromKeyboard()
     {
         printf(__GREEN "Enter a, b, c separated by \' \':\n" __RESET);
         fgets(inputLine, cMaxLine, stdin);
-        if (ParsePolynomial(inputLine, ' ', &pol) == rSucces)
+        if (ParsePolynomial(inputLine, ' ', &pol) == ecSucces)
         {
             return pol;
         }
         printf(__RED "Error: Incorrect input.\n\n" __RESET);
     }
 }
-
-Result Get2DegreePolynomialFromFile(FILE *fp, Polynomial *pp,
-                                    const char separator)
+//! returns ecSucces if parsing complete, otherwise ecParsingFailed
+ExitCode Get2DegreePolynomialFromFile(FILE *const fp, Polynomial *const pp,
+                                      const char separator)
 {
     ASSERT(fp != NULL);
 
@@ -37,11 +37,11 @@ Result Get2DegreePolynomialFromFile(FILE *fp, Polynomial *pp,
 
     char inputLine[cMaxLine] = {};
     fgets(inputLine, cMaxLine, fp);
-    Result result = ParsePolynomial(inputLine, separator, pp);
-    return result;
+    ExitCode exitCode = ParsePolynomial(inputLine, separator, pp);
+    return exitCode;
 }
 
-Polynomial Get2DegreePolynomial(InputType inputType)
+Polynomial Get2DegreePolynomial(InputType inputType) // TODO extract function
 {
     switch (inputType)
     {
@@ -61,7 +61,7 @@ Polynomial Get2DegreePolynomial(InputType inputType)
             exit(EXIT_FAILURE);
         }
         Polynomial pol = {};
-        if (Get2DegreePolynomialFromFile(fp, &pol, ';') == rFail)
+        if (Get2DegreePolynomialFromFile(fp, &pol, ';') == ecParsingFailed)
         {
             printf(__RED "Error: incorrect file input.\n");
             exit(EXIT_FAILURE);
@@ -91,7 +91,7 @@ InputType GetInputType()
     return (InputType)input;
 }
 
-void GetFileName(char *fileName)
+void GetFileName(char *const fileName)
 {
     printf(__GREEN "Enter file name:\n" __RESET);
 
@@ -103,7 +103,8 @@ void GetFileName(char *fileName)
     return;
 }
 
-Result ParsePolynomial(const char *s, char separator, Polynomial *pp)
+ExitCode ParsePolynomial(const char *const s, const char separator,
+                         Polynomial *const pp)
 {
     ASSERT(pp != NULL);
     ASSERT(s != NULL);
@@ -119,10 +120,10 @@ Result ParsePolynomial(const char *s, char separator, Polynomial *pp)
     }
     if (sscanf(s, format, pp->coefs + 2, pp->coefs + 1, pp->coefs) != 3)
     {
-        return rFail;
+        return ecParsingFailed;
     }
 
-    return rSucces;
+    return ecSucces;
 }
 
 bool AskForCycleSolve()
@@ -211,29 +212,7 @@ void DisplayPolynomial(Polynomial pol)
     return;
 }
 
-void DisplayCat()
-{
-    printf("%s", __YELLOW
-           "  /\\___/\\\n ( o   o )\n (  =^=  )\n (        )\n (         )\n ( "
-           "         ))))))))))))\n\n" __RESET);
-}
-
-void DisplaySadCat()
-{
-    printf("%s",
-           "          .__....._             _.....__,\n            .\": o "
-           ":':         ;': o :\".\n            `. `-' .'.       .'. `-' "
-           ".'\n              `---'             `---'\n\n    _...----...   "
-           "   ...   ...      ...----..._\n .-'__..-\"\"'----    `.  `\"`  "
-           ".'    ----'\"\"-..__`-.\n'.-'   _.--\"\"\"'       `-._.-'      "
-           " '\"\"\"--._   `-.`\n'  .-\"'                  :               "
-           "   `\"-.  `\n  '   `.              _.'\"'._              .'   "
-           "`\n        `.       ,.-\"'       \"'-.       .'\n          `.  "
-           "                         .'\n            `-._                  "
-           " _.-'\n                `\"'--...___...--'\"`\n```\n");
-}
-
-long CountLinesOfFile(FILE *fp)
+long CountLinesOfFile(FILE *const fp)
 {
     long currentPos = ftell(fp);
     fseek(fp, 0, SEEK_SET);
