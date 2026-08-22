@@ -54,6 +54,9 @@ Error Get2DegreePolynomial(const InputType inputType, Polynomial *const pp)
 
     case (itFile):
         return GetFirst2DegreePolynomialFromFile(pp);
+
+    default:
+        return CreateError(ecUnexpectedFailure, "");
     }
 }
 

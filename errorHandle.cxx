@@ -28,6 +28,10 @@ Error HandleError(const Error error)
         fprintf(stderr, __RED "Error: Failed parsing \"%s\".\n" __RESET,
                 error.context);
         break;
+    case ecUnexpectedFailure:
+    default:
+        fprintf(stderr, __RED "Error: Unexpected failure.\n");
+        break;
     }
     return error;
 }

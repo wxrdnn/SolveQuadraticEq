@@ -11,6 +11,7 @@ enum ExitCode
     ecFileIsEmpty = 2,
     ecIncorrectInput = 3,
     ecParsingFailed = 4,
+    ecUnexpectedFailure = 5,
 };
 
 typedef struct

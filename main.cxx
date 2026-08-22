@@ -5,7 +5,6 @@
 
 int main()
 {
-    // TODO point on first failed test
     // TODO File output
     // TODO check double for finite and NaN
     // TODO test solving square eq with nan and inf coefs
