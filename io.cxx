@@ -1,17 +1,19 @@
 #include "h/io.h"
 #include "h/colors.h"
 #include "h/debug.h"
+#include "h/errorHandle.h"
+#include "h/limits.h"
 #include "h/solve.h"
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
 
-Polynomial Get2DegreePolynomialFromKeyboard();
+void Get2DegreePolynomialFromKeyboard(Polynomial *const pp);
 
-Polynomial Get2DegreePolynomialFromKeyboard()
+void Get2DegreePolynomialFromKeyboard(Polynomial *const pp)
 {
-    Polynomial pol = {0};
-    pol.coefsAmount = 3;
+    *pp = {0};
+    pp->coefsAmount = 3;
 
     char inputLine[cMaxLine] = {};
 
@@ -19,16 +21,17 @@ Polynomial Get2DegreePolynomialFromKeyboard()
     {
         printf(__GREEN "Enter a, b, c separated by \' \':\n" __RESET);
         fgets(inputLine, cMaxLine, stdin);
-        if (ParsePolynomial(inputLine, ' ', &pol) == ecSucces)
+        Error error = ParsePolynomial(inputLine, ' ', pp);
+        if (error.exitCode == ecSucces)
         {
-            return pol;
+            return;
         }
-        printf(__RED "Error: Incorrect input.\n\n" __RESET);
+        HandleError(error);
     }
 }
-//! returns ecSucces if parsing complete, otherwise ecParsingFailed
-ExitCode Get2DegreePolynomialFromFile(FILE *const fp, Polynomial *const pp,
-                                      const char separator)
+//! returned ExitCodes: ecSucces, ecParsingFailed
+Error GetNext2DegreePolynomialFromFile(FILE *const fp, Polynomial *const pp,
+                                       const char separator)
 {
     ASSERT(fp != NULL);
 
@@ -37,39 +40,38 @@ ExitCode Get2DegreePolynomialFromFile(FILE *const fp, Polynomial *const pp,
 
     char inputLine[cMaxLine] = {};
     fgets(inputLine, cMaxLine, fp);
-    ExitCode exitCode = ParsePolynomial(inputLine, separator, pp);
-    return exitCode;
+    return ParsePolynomial(inputLine, separator, pp);
 }
 
-Polynomial Get2DegreePolynomial(InputType inputType) // TODO extract function
+//! returned ExitCodes: ecSucces, ecCantOpenFile, ecIncorrectInput
+Error Get2DegreePolynomial(const InputType inputType, Polynomial *const pp)
 {
     switch (inputType)
     {
-    default:
-        return {};
     case (itKeyborad):
-        return Get2DegreePolynomialFromKeyboard();
+        Get2DegreePolynomialFromKeyboard(pp);
+        return CreateError(ecSucces, "");
 
     case (itFile):
-        char fileName[cMaxLine] = {0};
-
-        GetFileName(fileName);
-        FILE *fp = fopen(fileName, "r");
-        if (fp == NULL)
-        {
-            printf("Error: Can\'t open file \"%s\".\n", fileName);
-            exit(EXIT_FAILURE);
-        }
-        Polynomial pol = {};
-        if (Get2DegreePolynomialFromFile(fp, &pol, ';') == ecParsingFailed)
-        {
-            printf(__RED "Error: incorrect file input.\n");
-            exit(EXIT_FAILURE);
-        }
-
-        fclose(fp);
-        return pol;
+        return GetFirst2DegreePolynomialFromFile(pp);
     }
+}
+
+//! returned ExitCodes: ecSucces, ecCantOpenFile, ecIncorrectInput
+Error GetFirst2DegreePolynomialFromFile(Polynomial *const pp)
+{
+    char fileName[cMaxLine] = {0};
+
+    GetFileName(fileName);
+    FILE *fp = fopen(fileName, "r");
+    if (fp == NULL)
+    {
+        return CreateError(ecCantOpenFile, fileName);
+    }
+
+    Error error = GetNext2DegreePolynomialFromFile(fp, pp, ';');
+    fclose(fp);
+    return error;
 }
 
 InputType GetInputType()
@@ -103,8 +105,8 @@ void GetFileName(char *const fileName)
     return;
 }
 
-ExitCode ParsePolynomial(const char *const s, const char separator,
-                         Polynomial *const pp)
+Error ParsePolynomial(const char *const s, const char separator,
+                      Polynomial *const pp)
 {
     ASSERT(pp != NULL);
     ASSERT(s != NULL);
@@ -118,12 +120,16 @@ ExitCode ParsePolynomial(const char *const s, const char separator,
         strcpy(prevFormat, format);
         sprintf(format, "%s%%lg%c", prevFormat, separator);
     }
+
     if (sscanf(s, format, pp->coefs + 2, pp->coefs + 1, pp->coefs) != 3)
     {
-        return ecParsingFailed;
+        char context[cMaxLine] = {};
+        strcpy(context, s);
+        ReplaceNewLineCharWithNullTerminator(context);
+        return CreateError(ecParsingFailed, context);
     }
 
-    return ecSucces;
+    return CreateError(ecSucces, "");
 }
 
 bool AskForCycleSolve()
@@ -177,9 +183,8 @@ void DisplayRoots(Roots roots)
     }
     else
     {
-        printf(
-            __CYAN
-            "There are infinite number of roots for this equation\n" __RESET);
+        printf(__CYAN "There are infinite number of roots for this "
+                      "equation\n" __RESET);
     }
     return;
 }
@@ -226,4 +231,14 @@ long CountLinesOfFile(FILE *const fp)
 
     fseek(fp, currentPos, SEEK_SET);
     return count;
+}
+
+void ReplaceNewLineCharWithNullTerminator(char *const s)
+{
+    char *p = strchr(s, '\n');
+    if (p)
+    {
+        *p = '\0';
+    }
+    return;
 }

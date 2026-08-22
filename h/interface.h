@@ -2,9 +2,11 @@
 
 #define INTERFACE_H
 
+#include "errorHandle.h"
 #include "io.h"
+#include "solve.h"
 
-void SolveSingle(const InputType inputType);
-void SolveCycle();
+Error SolveSingle(const InputType inputType);
+Error SolveCycle();
 
 #endif

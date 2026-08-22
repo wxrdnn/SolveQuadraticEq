@@ -2,9 +2,9 @@
 
 #define __SOLVE
 
+#include "limits.h"
+
 const int cInfiniteRootsAmount = -1;
-const int cMaxCoefsAmount = 8;
-const int cMaxRootsAmount = 8;
 
 typedef struct
 {

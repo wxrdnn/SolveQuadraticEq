@@ -4,6 +4,4 @@
 
 #include "io.h"
 
-Result
-
 #endif

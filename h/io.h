@@ -2,11 +2,9 @@
 
 #define IO_H
 
-#include "ercodes.h"
+#include "errorHandle.h"
 #include "solve.h"
 #include <stdio.h>
-
-const int cMaxLine = 1024;
 
 enum InputType
 {
@@ -14,17 +12,19 @@ enum InputType
     itFile = 1,
 };
 
-Polynomial Get2DegreePolynomial(const InputType inputType);
+Error Get2DegreePolynomial(const InputType inputType, Polynomial *const pp);
+
+Error GetFirst2DegreePolynomialFromFile(Polynomial *const pp);
+
+Error GetNext2DegreePolynomialFromFile(FILE *const fp, Polynomial *const pp,
+                                       const char separator);
 
 InputType GetInputType();
 
-ExitCode Get2DegreePolynomialFromFile(FILE *const fp, Polynomial *const pp,
-                                      const char separator);
-
 void GetFileName(char *const fileName);
 
-ExitCode ParsePolynomial(const char *const s, const char separator,
-                         Polynomial *pp);
+Error ParsePolynomial(const char *const s, const char separator,
+                      Polynomial *pp);
 
 bool AskForCycleSolve();
 
@@ -35,5 +35,7 @@ void DisplayRoots(const Roots roots);
 void DisplayPolynomial(const Polynomial pol);
 
 long CountLinesOfFile(FILE *const fp);
+
+void ReplaceNewLineCharWithNullTerminator(char *const s);
 
 #endif
