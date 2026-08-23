@@ -5,6 +5,8 @@
 #include "limits.h"
 
 const int cInfiniteRootsAmount = -1;
+const int c2DegreeCoefsAmount = 3;
+const int c1DegreeCoefsAmount = 2;
 
 typedef struct
 {
@@ -24,10 +26,9 @@ typedef struct
 //! @param [in] a a-coefficient
 //! @param [in] b a-coefficient
 //! @param [in] c a-coefficient
-//! @param [out] x1 Pointer to the 1st root
-//! @param [out] x2 Pointer to the 2nd root
 //!
-//! @return Number of roots
+//! @return Roots structure contains amount of roots and their values by
+//! ascending.
 //!
 //! @note In case of infinite number of roots, returns SLE_INFINITE_ROOTS.
 //----------------------------------------------------------

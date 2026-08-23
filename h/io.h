@@ -19,9 +19,9 @@ Error GetFirst2DegreePolynomialFromFile(Polynomial *const pp);
 Error GetNext2DegreePolynomialFromFile(FILE *const fp, Polynomial *const pp,
                                        const char separator);
 
-InputType GetInputType();
+InputType AskForInputType();
 
-void GetFileName(char *const fileName);
+void AskForFileName(char *const fileName);
 
 Error ParsePolynomial(const char *const s, const char separator,
                       Polynomial *pp);

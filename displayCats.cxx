@@ -1,5 +1,5 @@
-#include "h/cats.h"
 #include "h/colors.h"
+#include "h/displayCats.h"
 #include <stdio.h>
 
 void DisplayCat()

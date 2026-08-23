@@ -2,8 +2,9 @@
 
 #define DEBUG_H
 
-#include "cats.h"
 #include "colors.h"
+#include "displayCats.h"
+#include "solve.h"
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -19,5 +20,9 @@
             exit(1);                                                           \
         }                                                                      \
     }
+
+void AssertPolynomialFinite(const Polynomial pol);
+void AssertRootsFinite(const Roots roots);
+void AssertDoubleCorrect(const double x);
 
 #endif

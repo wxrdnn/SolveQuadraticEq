@@ -12,8 +12,10 @@ void Get2DegreePolynomialFromKeyboard(Polynomial *const pp);
 
 void Get2DegreePolynomialFromKeyboard(Polynomial *const pp)
 {
+    ASSERT(pp != NULL);
+
     *pp = {0};
-    pp->coefsAmount = 3;
+    pp->coefsAmount = c2DegreeCoefsAmount;
 
     char inputLine[cMaxLine] = {};
 
@@ -22,7 +24,7 @@ void Get2DegreePolynomialFromKeyboard(Polynomial *const pp)
         printf(__GREEN "Enter a, b, c separated by \' \':\n" __RESET);
         fgets(inputLine, cMaxLine, stdin);
         Error error = ParsePolynomial(inputLine, ' ', pp);
-        if (error.exitCode == ecSucces)
+        if (error.exitCode == ecSuccess)
         {
             return;
         }
@@ -34,9 +36,10 @@ Error GetNext2DegreePolynomialFromFile(FILE *const fp, Polynomial *const pp,
                                        const char separator)
 {
     ASSERT(fp != NULL);
+    ASSERT(pp != NULL);
 
     *pp = {};
-    pp->coefsAmount = 3;
+    pp->coefsAmount = c2DegreeCoefsAmount;
 
     char inputLine[cMaxLine] = {};
     fgets(inputLine, cMaxLine, fp);
@@ -46,11 +49,13 @@ Error GetNext2DegreePolynomialFromFile(FILE *const fp, Polynomial *const pp,
 //! returned ExitCodes: ecSucces, ecCantOpenFile, ecIncorrectInput
 Error Get2DegreePolynomial(const InputType inputType, Polynomial *const pp)
 {
+    ASSERT(pp != NULL);
+
     switch (inputType)
     {
     case (itKeyborad):
         Get2DegreePolynomialFromKeyboard(pp);
-        return CreateError(ecSucces, "");
+        return CreateError(ecSuccess, "");
 
     case (itFile):
         return GetFirst2DegreePolynomialFromFile(pp);
@@ -63,9 +68,11 @@ Error Get2DegreePolynomial(const InputType inputType, Polynomial *const pp)
 //! returned ExitCodes: ecSucces, ecCantOpenFile, ecIncorrectInput
 Error GetFirst2DegreePolynomialFromFile(Polynomial *const pp)
 {
+    ASSERT(pp != NULL);
+
     char fileName[cMaxLine] = {0};
 
-    GetFileName(fileName);
+    AskForFileName(fileName);
     FILE *fp = fopen(fileName, "r");
     if (fp == NULL)
     {
@@ -77,12 +84,12 @@ Error GetFirst2DegreePolynomialFromFile(Polynomial *const pp)
     return error;
 }
 
-InputType GetInputType()
+InputType AskForInputType()
 {
     printf(__GREEN "Select input type:\n0: from keyboard\n1: from "
                    "file\n\n(default=0)\n" __RESET);
 
-    int input = -1;
+    int input = itKeyborad;
 
     char inputLine[cMaxLine] = {};
     fgets(inputLine, cMaxLine, stdin);
@@ -96,8 +103,10 @@ InputType GetInputType()
     return (InputType)input;
 }
 
-void GetFileName(char *const fileName)
+void AskForFileName(char *const fileName)
 {
+    ASSERT(fileName != NULL);
+
     printf(__GREEN "Enter file name:\n" __RESET);
 
     char inputLine[cMaxLine] = {};
@@ -111,8 +120,8 @@ void GetFileName(char *const fileName)
 Error ParsePolynomial(const char *const s, const char separator,
                       Polynomial *const pp)
 {
-    ASSERT(pp != NULL);
     ASSERT(s != NULL);
+    ASSERT(pp != NULL);
 
     int coefsAmount = pp->coefsAmount;
     char format[cMaxLine] = {0};
@@ -132,7 +141,7 @@ Error ParsePolynomial(const char *const s, const char separator,
         return CreateError(ecParsingFailed, context);
     }
 
-    return CreateError(ecSucces, "");
+    return CreateError(ecSuccess, "");
 }
 
 bool AskForCycleSolve()
@@ -140,17 +149,17 @@ bool AskForCycleSolve()
     printf(__GREEN "Solve all equations from file, or the first one "
                    "only:\n0: the first one\n1: all\n\n(default=0)\n" __RESET);
 
-    int input = -1;
+    int input = 0; // default value
 
     char inputLine[cMaxLine] = {};
     fgets(inputLine, cMaxLine, stdin);
 
     if (sscanf(inputLine, "%d", &input) != 1 || (input != 1 && input != 0))
     {
-        return 0;
+        return false;
     }
 
-    return input;
+    return (bool)input;
 }
 
 void DisplayGreeting()
@@ -163,7 +172,8 @@ void DisplayGreeting()
 
 void DisplayRoots(Roots roots)
 {
-    ASSERT(roots.rootsAmount >= 0 || roots.rootsAmount == cInfiniteRootsAmount)
+    ASSERT(roots.rootsAmount >= 0 || roots.rootsAmount == cInfiniteRootsAmount);
+    AssertRootsFinite(roots);
 
     if (roots.rootsAmount > 1)
     {
@@ -194,6 +204,7 @@ void DisplayRoots(Roots roots)
 
 void DisplayPolynomial(Polynomial pol)
 {
+    AssertPolynomialFinite(pol);
     printf(__MAGENTA "Solving ");
 
     for (int i = pol.coefsAmount; i > 0; --i)
@@ -220,38 +231,12 @@ void DisplayPolynomial(Polynomial pol)
     return;
 }
 
-long CountLinesOfFile(FILE *const fp)
-{
-    long currentPos = ftell(fp);
-    fseek(fp, 0, SEEK_SET);
-
-    char buffer[cMaxLine] = {};
-    long count = 0;
-    while (fgets(buffer, cMaxLine, fp) != NULL)
-    {
-        ++count;
-    }
-
-    fseek(fp, currentPos, SEEK_SET);
-    return count;
-}
-
-void ReplaceNewLineCharWithNullTerminator(char *const s)
-{
-    char *p = strchr(s, '\n');
-    if (p)
-    {
-        *p = '\0';
-    }
-    return;
-}
-
 //! works with opened files only
 bool FileIsEmpty(FILE *fp)
 {
     ASSERT(fp != NULL);
 
-    int c = 0;
+    int c = 0; // default value
     if ((c = getc(fp)) == EOF)
     {
         return true;

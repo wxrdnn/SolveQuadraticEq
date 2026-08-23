@@ -7,7 +7,7 @@ Error HandleError(const Error error)
 {
     switch (error.exitCode)
     {
-    case ecSucces:
+    case ecSuccess:
         break;
 
     case ecCantOpenFile:
@@ -40,6 +40,7 @@ Error CreateError(const ExitCode exitCode, const char *const context)
 {
     Error error = {};
     error.exitCode = exitCode;
-    strcpy(error.context, context);
+    strcpy(error.context,
+           context ? context : ""); // use empty string if context is null.
     return error;
 }

@@ -3,15 +3,13 @@
 #include "h/io.h"
 #include "h/limits.h"
 #include "h/solve.h"
-#include <cstdio>
-#include <cstring>
 
 //! returned ExitCodes are
 Error SolveSingle(const InputType inputType)
 {
     Polynomial pol = {};
     Error error = Get2DegreePolynomial(inputType, &pol);
-    if (error.exitCode != ecSucces)
+    if (error.exitCode != ecSuccess)
     {
         return error;
     }
@@ -24,7 +22,7 @@ Error SolveCycle()
 {
     char fileName[cMaxLine] = {0};
 
-    GetFileName(fileName);
+    AskForFileName(fileName);
     FILE *fp = fopen(fileName, "r");
     if (fp == NULL)
     {
@@ -35,6 +33,7 @@ Error SolveCycle()
 
     if (FileIsEmpty(fp))
     {
+        fclose(fp);
         return CreateError(ecFileIsEmpty, fileName);
     }
 
@@ -42,8 +41,9 @@ Error SolveCycle()
     {
         Polynomial pol = {};
         Error error = GetNext2DegreePolynomialFromFile(fp, &pol, ';');
-        if (error.exitCode != ecSucces)
+        if (error.exitCode != ecSuccess)
         {
+            fclose(fp);
             return error;
         }
         printf("%s", "-------------------------\n");
@@ -54,5 +54,5 @@ Error SolveCycle()
     printf("%s", "-------------------------\n");
 
     fclose(fp);
-    return CreateError(ecSucces, "");
+    return CreateError(ecSuccess, "");
 }

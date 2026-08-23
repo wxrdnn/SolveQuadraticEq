@@ -6,7 +6,7 @@
 
 enum ExitCode
 {
-    ecSucces = 0,
+    ecSuccess = 0,
     ecCantOpenFile = 1,
     ecFileIsEmpty = 2,
     ecIncorrectInput = 3,
