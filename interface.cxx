@@ -3,6 +3,7 @@
 #include "h/io.h"
 #include "h/limits.h"
 #include "h/solve.h"
+#include "h/utils.h"
 
 //! returned ExitCodes are
 Error SolveSingle(const InputType inputType)

@@ -12,6 +12,8 @@ enum ExitCode
     ecIncorrectInput = 3,
     ecParsingFailed = 4,
     ecUnexpectedFailure = 5,
+    ecCantReadFile = 6,
+    ecTestFilesDiffer = 7,
 };
 
 typedef struct

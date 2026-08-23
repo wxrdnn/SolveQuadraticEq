@@ -19,12 +19,18 @@ Error GetFirst2DegreePolynomialFromFile(Polynomial *const pp);
 Error GetNext2DegreePolynomialFromFile(FILE *const fp, Polynomial *const pp,
                                        const char separator);
 
+Error GetNext2DegreeRootsFromFile(FILE *const fp, Roots *const rp,
+                                  const char separator);
+
 InputType AskForInputType();
 
 void AskForFileName(char *const fileName);
 
 Error ParsePolynomial(const char *const s, const char separator,
                       Polynomial *pp);
+
+Error Parse2DegreeRoots(const char *const s, const char separator,
+                        Roots *const rp);
 
 bool AskForCycleSolve();
 
@@ -33,10 +39,6 @@ void DisplayGreeting();
 void DisplayRoots(const Roots roots);
 
 void DisplayPolynomial(const Polynomial pol);
-
-long CountLinesOfFile(FILE *const fp);
-
-void ReplaceNewLineCharWithNullTerminator(char *const s);
 
 bool FileIsEmpty(FILE *fp);
 

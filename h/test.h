@@ -2,9 +2,11 @@
 
 #define TEST_H
 
-#include "io.h"
+#include "errorHandle.h"
+#include "solve.h"
 
-bool RunSingleTest(const Polynomial *const pp, Roots *const rp,
-                   const Roots *const refrp);
+bool RunSingleTest(const Polynomial pol, const Roots roots);
+
+Error RunTests();
 
 #endif

@@ -4,6 +4,8 @@
 #include "h/errorHandle.h"
 #include "h/limits.h"
 #include "h/solve.h"
+#include "h/utils.h"
+#include <cstdlib>
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
@@ -44,6 +46,20 @@ Error GetNext2DegreePolynomialFromFile(FILE *const fp, Polynomial *const pp,
     char inputLine[cMaxLine] = {};
     fgets(inputLine, cMaxLine, fp);
     return ParsePolynomial(inputLine, separator, pp);
+}
+
+Error GetNext2DegreeRootsFromFile(FILE *const fp, Roots *const rp,
+                                  const char separator)
+{
+    ASSERT(fp != NULL);
+    ASSERT(rp != NULL);
+
+    *rp = {};
+
+    char inputLine[cMaxLine] = {};
+    fgets(inputLine, cMaxLine, fp);
+    // printf("input line of roots: %s", inputLine);
+    return Parse2DegreeRoots(inputLine, separator, rp);
 }
 
 //! returned ExitCodes: ecSucces, ecCantOpenFile, ecIncorrectInput
@@ -130,7 +146,7 @@ Error ParsePolynomial(const char *const s, const char separator,
     {
         char prevFormat[cMaxLine - sizeof("%s%%lg%c")] = {};
         strcpy(prevFormat, format);
-        sprintf(format, "%s%%lg%c", prevFormat, separator);
+        sprintf(format, "%s%%lg%c", prevFormat, separator); // TODO use %n
     }
 
     if (sscanf(s, format, pp->coefs + 2, pp->coefs + 1, pp->coefs) != 3)
@@ -142,6 +158,56 @@ Error ParsePolynomial(const char *const s, const char separator,
     }
 
     return CreateError(ecSuccess, "");
+}
+
+Error Parse2DegreeRoots(const char *const s, const char separator,
+                        Roots *const rp)
+{
+    ASSERT(s != NULL);
+    ASSERT(rp != NULL);
+
+    *rp = {};
+    Error success = CreateError(ecSuccess, "");
+    int nRoots = 0;
+    double x1 = 0, x2 = 0;
+    char fmt[cMaxLine] = {};
+
+    if (sscanf(s, "%d", &nRoots) != 1)
+    {
+        return CreateError(ecParsingFailed, s);
+    }
+
+    rp->rootsAmount = nRoots;
+
+    switch (nRoots)
+    {
+    case 1:
+        sprintf(fmt, "%%d%c%%lg%c", separator, separator);
+        if (sscanf(s, fmt, &nRoots, &x1) != 2)
+        {
+            return CreateError(ecParsingFailed, "");
+        }
+        break;
+
+    case 2:
+        sprintf(fmt, "%%d%c%%lg%c%%lg%c", separator, separator, separator);
+        if (sscanf(s, fmt, &nRoots, &x1, &x2) != 3)
+        {
+            return CreateError(ecParsingFailed, "");
+        }
+        break;
+
+    case 0:
+    case cInfiniteRootsAmount:
+    default:
+        break;
+    }
+
+    rp->rootsAmount = nRoots;
+    rp->roots[0] = x1;
+    rp->roots[1] = x2;
+    AssertRootsFinite(*rp);
+    return success;
 }
 
 bool AskForCycleSolve()

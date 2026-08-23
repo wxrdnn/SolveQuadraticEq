@@ -1,6 +1,6 @@
-#ifndef __SOLVE
+#ifndef SOLVE_H
 
-#define __SOLVE
+#define SOLVE_H
 
 #include "limits.h"
 
@@ -50,5 +50,7 @@ Roots SolveQuadraticEquation(const Polynomial pol);
 Roots SolveLinearEquation(const Polynomial pol);
 
 double Get2DegreeDiscriminant(const Polynomial pol);
+
+bool EqualRoots(const Roots r1, const Roots r2);
 
 #endif

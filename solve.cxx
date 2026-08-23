@@ -1,6 +1,7 @@
 #include "h/solve.h"
 #include "h/debug.h"
 #include "h/utils.h"
+#include <cstdio>
 #include <math.h>
 
 Roots SolveTrueQuadraticEquation(const Polynomial pol);
@@ -96,4 +97,22 @@ double Get2DegreeDiscriminant(const Polynomial pol)
     AssertPolynomialFinite(pol);
 
     return b * b - 4 * a * c;
+}
+
+bool EqualRoots(const Roots r1, const Roots r2)
+{
+    if (r1.rootsAmount != r2.rootsAmount)
+    {
+        return false;
+    }
+    for (int i = 0; i < r1.rootsAmount; ++i)
+    {
+        if (!Equal(r1.roots[i], r2.roots[i]))
+        {
+            // printf("roots diifer! root number: %d, root1: %lg, root2: %lg\n",
+            // i + 1, r1.roots[i], r2.roots[i]);
+            return false;
+        }
+    }
+    return true;
 }

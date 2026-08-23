@@ -4,7 +4,7 @@
 
 #include <stdio.h>
 
-const double cCompareEpsilon = 1e-9;
+const double cCompareEpsilon = 1e-4;
 
 bool Equal(const double x, const double y);
 

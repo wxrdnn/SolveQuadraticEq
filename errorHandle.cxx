@@ -11,7 +11,7 @@ Error HandleError(const Error error)
         break;
 
     case ecCantOpenFile:
-        fprintf(stderr, __RED "Error: Can\'t open file \"%s\".\n" __RESET,
+        fprintf(stderr, __RED "Error: Failed to open file \"%s\".\n" __RESET,
                 error.context);
         break;
 
@@ -28,6 +28,16 @@ Error HandleError(const Error error)
         fprintf(stderr, __RED "Error: Failed parsing \"%s\".\n" __RESET,
                 error.context);
         break;
+
+    case ecCantReadFile:
+        fprintf(stderr, __RED "Error: Failed to read file \"%s\".\n" __RESET,
+                error.context);
+        break;
+
+    case ecTestFilesDiffer:
+        fprintf(stderr, __RED "Error: Test files lengths differ.\n" __RESET);
+        break;
+
     case ecUnexpectedFailure:
     default:
         fprintf(stderr, __RED "Error: Unexpected failure.\n");
