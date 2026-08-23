@@ -47,7 +47,7 @@ Roots SolveLinearEquation(Polynomial pol)
 
 Roots SolveTrueQuadraticEquation(Polynomial pol)
 {
-    double c = pol.coefs[0];
+    // double c = pol.coefs[0]; <- unused variable
     double b = pol.coefs[1];
     double a = pol.coefs[2];
 
