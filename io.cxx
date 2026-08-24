@@ -5,6 +5,8 @@
 #include "h/limits.h"
 #include "h/solve.h"
 #include "h/utils.h"
+#include <cctype>
+#include <cmath>
 #include <cstdlib>
 #include <math.h>
 #include <stdio.h>
@@ -154,21 +156,45 @@ Error ParsePolynomial(const char *const s, const char separator,
     ASSERT(pp != NULL);
 
     int coefsAmount = pp->coefsAmount;
-    char format[cMaxLine] = {0};
 
-    for (int i = coefsAmount; i > 0; --i)
+    const char *p = s;
+    int buf = 0;
+    int power = 0;
+    char sign = 1; // 1 or -1
+    int index = coefsAmount - 1;
+    while (1)
     {
-        char prevFormat[cMaxLine - sizeof("%s%%lg%c")] = {};
-        strcpy(prevFormat, format);
-        sprintf(format, "%s%%lg%c", prevFormat, separator); // TODO use %n
-    }
-
-    if (sscanf(s, format, pp->coefs + 2, pp->coefs + 1, pp->coefs) != 3)
-    {
-        char context[cMaxLine] = {};
-        strcpy(context, s);
-        ReplaceNewLineCharWithNullTerminator(context);
-        return CreateError(ecParsingFailed, context);
+        if (isdigit(*p))
+        {
+            buf += (*p - '0') * pow(10, power);
+            ++power;
+        }
+        else if (*p == '-')
+        {
+            sign = -sign;
+        }
+        else if (*p == '+')
+            ;
+        else if (*p == separator)
+        {
+            pp->coefs[index] = buf * sign;
+            buf = 0;
+            power = 0;
+            sign = 1;
+            --index;
+        }
+        else if (*p == '\n')
+            ;
+        else if (*p == '\0')
+        {
+            pp->coefs[index] = buf * sign;
+            return CreateError(ecSuccess, "");
+        }
+        else
+        {
+            return CreateError(ecParsingFailed, s);
+        }
+        ++p;
     }
 
     return CreateError(ecSuccess, "");

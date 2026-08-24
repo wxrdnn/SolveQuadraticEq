@@ -22,7 +22,7 @@ typedef struct
     char context[cMaxLine];
 } Error;
 
-Error HandleError(const Error error);
+Error HandleError(Error error);
 
 Error CreateError(const ExitCode exitCode, const char *const context);
 

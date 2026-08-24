@@ -1,10 +1,12 @@
 #include "h/errorHandle.h"
 #include "h/colors.h"
+#include "h/utils.h"
 #include "string.h"
 #include <stdio.h>
 
-Error HandleError(const Error error)
+Error HandleError(Error error)
 {
+    ReplaceNewLineCharWithNullTerminator(error.context);
     switch (error.exitCode)
     {
     case ecSuccess:
