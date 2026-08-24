@@ -56,3 +56,11 @@ void ReplaceNewLineCharWithNullTerminator(char *const s)
     }
     return;
 }
+
+void ClearBuffer()
+{
+    int c = 0;
+    while ((c = getchar()) != '\n' && c != EOF)
+        ;
+    return;
+}

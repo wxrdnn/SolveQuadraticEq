@@ -6,6 +6,7 @@
 
 int main()
 {
+    // TODO Fix asking for input type
     // TODO use errno for crash reasons
     // TODO File output
     // TODO test solving square eq with nan and inf coefs

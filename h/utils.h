@@ -16,4 +16,6 @@ long CountLinesOfFile(FILE *const fp);
 
 void ReplaceNewLineCharWithNullTerminator(char *const s);
 
+void ClearBuffer();
+
 #endif

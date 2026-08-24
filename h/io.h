@@ -42,4 +42,7 @@ void DisplayPolynomial(const Polynomial pol);
 
 bool FileIsEmpty(FILE *fp);
 
+//! returns correct input, otherwise 0
+int GetNum();
+
 #endif

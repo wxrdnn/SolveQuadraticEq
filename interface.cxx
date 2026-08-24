@@ -1,4 +1,5 @@
 #include "h/interface.h"
+#include "h/debug.h"
 #include "h/errorHandle.h"
 #include "h/io.h"
 #include "h/limits.h"
@@ -10,6 +11,7 @@ Error SolveSingle(const InputType inputType)
 {
     Polynomial pol = {};
     Error error = Get2DegreePolynomial(inputType, &pol);
+    // ASSERT(0);
     if (error.exitCode != ecSuccess)
     {
         return error;

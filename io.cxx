@@ -12,7 +12,8 @@
 
 void Get2DegreePolynomialFromKeyboard(Polynomial *const pp);
 
-void Get2DegreePolynomialFromKeyboard(Polynomial *const pp)
+void Get2DegreePolynomialFromKeyboard(
+    Polynomial *const pp) // FIX error handling
 {
     ASSERT(pp != NULL);
 
@@ -21,10 +22,18 @@ void Get2DegreePolynomialFromKeyboard(Polynomial *const pp)
 
     char inputLine[cMaxLine] = {};
 
+    // ClearBuffer();
+    // ASSERT(0);
     while (true)
     {
         printf(__GREEN "Enter a, b, c separated by \' \':\n" __RESET);
         fgets(inputLine, cMaxLine, stdin);
+        // printf("[%s]", inputLine);
+        if (inputLine[0] == '\n')
+        {
+            HandleError(CreateError(ecIncorrectInput, ""));
+            continue;
+        }
         Error error = ParsePolynomial(inputLine, ' ', pp);
         if (error.exitCode == ecSuccess)
         {
@@ -105,18 +114,23 @@ InputType AskForInputType()
     printf(__GREEN "Select input type:\n0: from keyboard\n1: from "
                    "file\n\n(default=0)\n" __RESET);
 
-    int input = itKeyborad;
+    // char inputLine[cMaxLine] = {};
+    // fgets(inputLine, cMaxLine, stdin);
 
-    char inputLine[cMaxLine] = {};
-    fgets(inputLine, cMaxLine, stdin);
+    // printf("%d", input);
+    // ASSERT(0);
 
-    if (sscanf(inputLine, "%d", &input) != 1 ||
-        (input != itKeyborad && input != itFile))
+    int input = GetNum();
+
+    switch (input)
     {
+    case 0:
+    default:
         return itKeyborad;
-    }
 
-    return (InputType)input;
+    case 1:
+        return itFile;
+    }
 }
 
 void AskForFileName(char *const fileName)
@@ -125,10 +139,10 @@ void AskForFileName(char *const fileName)
 
     printf(__GREEN "Enter file name:\n" __RESET);
 
-    char inputLine[cMaxLine] = {};
-
-    fgets(inputLine, cMaxLine, stdin);
-    sscanf(inputLine, "%s", fileName); // Remove \n
+    // fgets(inputLine, cMaxLine, stdin);
+    // sscanf(inputLine, "%s", fileName); // Remove \n
+    scanf("%s", fileName); // Remove \n
+    ClearBuffer();
 
     return;
 }
@@ -215,17 +229,13 @@ bool AskForCycleSolve()
     printf(__GREEN "Solve all equations from file, or the first one "
                    "only:\n0: the first one\n1: all\n\n(default=0)\n" __RESET);
 
-    int input = 0; // default value
+    // char inputLine[cMaxLine] = {};
+    // fgets(inputLine, cMaxLine, stdin);
+    // ClearBuffer();
+    // ASSERT(0);
+    // printf("%d\n", getchar());
 
-    char inputLine[cMaxLine] = {};
-    fgets(inputLine, cMaxLine, stdin);
-
-    if (sscanf(inputLine, "%d", &input) != 1 || (input != 1 && input != 0))
-    {
-        return false;
-    }
-
-    return (bool)input;
+    return GetNum();
 }
 
 void DisplayGreeting()
@@ -277,7 +287,8 @@ void DisplayPolynomial(Polynomial pol)
     {
         if (i > 2)
         {
-            printf(pol.coefs[i - 1] > 0 ? "" : "-");
+            printf(pol.coefs[i - 1] > 0 || EqualToZero(pol.coefs[i - 1]) ? ""
+                                                                         : "-");
             printf("%lg*x%d", fabs(pol.coefs[i - 1]), i - 1);
             printf(pol.coefs[i - 2] > 0 ? " + " : " - ");
         }
@@ -310,4 +321,19 @@ bool FileIsEmpty(FILE *fp)
 
     ungetc(c, fp);
     return false;
+}
+
+int GetNum()
+{
+    int c = 0;
+    if ((c = getc(stdin)) == '\n')
+    {
+        // printf("got \\n\n");
+        return 0;
+    }
+    ungetc(c, stdin);
+    int input = 0; // default value
+    scanf("%d", &input);
+    ClearBuffer();
+    return input;
 }

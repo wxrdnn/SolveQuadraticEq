@@ -24,7 +24,7 @@ bool RunSingleTest(const Polynomial pol, const Roots refRoots)
     Roots roots = SolveQuadraticEquation(pol);
     if (EqualRoots(roots, refRoots))
     {
-        // printf(__GREEN "TEST PASSED\n" __RESET);
+        printf(__GREEN "TEST PASSED\n" __RESET);
         return true;
     }
     else

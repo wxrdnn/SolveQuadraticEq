@@ -21,7 +21,7 @@ Error HandleError(const Error error)
         break;
 
     case ecIncorrectInput:
-        fprintf(stderr, __RED "Error: Incorrect file input.\n" __RESET);
+        fprintf(stderr, __RED "Error: Incorrect input.\n" __RESET);
         break;
 
     case ecParsingFailed:
