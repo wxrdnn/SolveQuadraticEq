@@ -1,16 +1,17 @@
+#include "h/debug.h"
 #include "h/displayCats.h"
 #include "h/errorHandle.h"
 #include "h/interface.h"
 #include "h/io.h"
+#include <math.h>
 #include <stdlib.h>
 
 int main()
 {
-    // TODO Fix asking for input type
-    // TODO use errno for crash reasons
     // TODO File output
-    // TODO test solving square eq with nan and inf coefs
     // TODO solve cycle from keyboard
+
+    // ASSERT_DOUBLE_CORRECT(INFINITY);
 
     DisplayGreeting();
     DisplayCat();

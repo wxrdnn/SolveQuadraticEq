@@ -6,6 +6,7 @@
 #include "h/limits.h"
 #include "h/solve.h"
 #include "h/utils.h"
+#include <cerrno>
 #include <cstdio>
 #include <stdlib.h>
 
@@ -50,12 +51,12 @@ Error RunTests()
     FILE *fppols = fopen(polynomialsFileName, "r");
     if (fppols == NULL)
     {
-        return CreateError(ecCantOpenFile, polynomialsFileName);
+        return CreateError(TranslateErrnoCode(errno), polynomialsFileName);
     }
     FILE *fprefroots = fopen(refRootsFileName, "r");
     if (fprefroots == NULL)
     {
-        return CreateError(ecCantOpenFile, refRootsFileName);
+        return CreateError(TranslateErrnoCode(errno), refRootsFileName);
     }
     Polynomial pol = {};
     Roots refRoots = {};

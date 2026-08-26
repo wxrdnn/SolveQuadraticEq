@@ -2,17 +2,16 @@
 #include "h/solve.h"
 #include <math.h>
 
-void AssertDoubleCorrect(const double x)
-{
-    ASSERT(std::isfinite(x));
-    ASSERT(!std::isnan(x));
-}
+// void ASSERT_DOUBLE_CORRECT(const double x)
+// {
+//     ASSERT(isfinite(x));
+// }
 
-void AssertPolynomialFinite(const Polynomial pol)
+void AssertPolynomialCorrect(const Polynomial pol)
 {
     for (int i = 0; i < pol.coefsAmount; ++i)
     {
-        AssertDoubleCorrect(pol.coefs[i]);
+        ASSERT_DOUBLE_CORRECT(pol.coefs[i]);
     }
     return;
 }
@@ -21,7 +20,7 @@ void AssertRootsFinite(const Roots roots)
 {
     for (int i = 0; i < roots.rootsAmount; ++i)
     {
-        AssertDoubleCorrect(roots.roots[i]);
+        ASSERT_DOUBLE_CORRECT(roots.roots[i]);
     }
     return;
 }

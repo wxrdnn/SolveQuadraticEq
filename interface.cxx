@@ -5,6 +5,7 @@
 #include "h/limits.h"
 #include "h/solve.h"
 #include "h/utils.h"
+#include <cerrno>
 
 //! returned ExitCodes are
 Error SolveSingle(const InputType inputType)
@@ -29,7 +30,7 @@ Error SolveCycle()
     FILE *fp = fopen(fileName, "r");
     if (fp == NULL)
     {
-        return CreateError(ecCantOpenFile, fileName);
+        return CreateError(TranslateErrnoCode(errno), fileName);
     }
 
     long fileLength = CountLinesOfFile(fp);

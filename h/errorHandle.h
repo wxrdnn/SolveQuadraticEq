@@ -7,13 +7,22 @@
 enum ExitCode
 {
     ecSuccess = 0,
-    ecCantOpenFile = 1,
+    ecNoSuchFile = 1,
     ecFileIsEmpty = 2,
     ecIncorrectInput = 3,
     ecParsingFailed = 4,
     ecUnexpectedFailure = 5,
     ecCantReadFile = 6,
     ecTestFilesDiffer = 7,
+    ecNoAccesToFile = 8,
+    ecTooManyOpenFiles = 9,
+    ecFileIsDirectory = 10,
+    ecFileNameTooLong = 11,
+    ecHardwareError = 12,
+    ecFileIsBusy = 13,
+    ecNoSpaceOnDevice = 14,
+    ecReadOnly = 15,
+    ecNotDirectory = 16,
 };
 
 typedef struct
@@ -25,5 +34,7 @@ typedef struct
 Error HandleError(Error error);
 
 Error CreateError(const ExitCode exitCode, const char *const context);
+
+ExitCode TranslateErrnoCode(int errnoCode);
 
 #endif

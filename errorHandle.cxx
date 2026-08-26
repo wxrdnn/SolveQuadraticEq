@@ -2,6 +2,7 @@
 #include "h/colors.h"
 #include "h/utils.h"
 #include "string.h"
+#include <cerrno>
 #include <stdio.h>
 
 Error HandleError(Error error)
@@ -12,8 +13,10 @@ Error HandleError(Error error)
     case ecSuccess:
         break;
 
-    case ecCantOpenFile:
-        fprintf(stderr, __RED "Error: Failed to open file \"%s\".\n" __RESET,
+    case ecNoSuchFile:
+        fprintf(stderr,
+                __RED "Error: Failed to open file \"%s\" - no such file in "
+                      "directory.\n" __RESET,
                 error.context);
         break;
 
@@ -40,6 +43,62 @@ Error HandleError(Error error)
         fprintf(stderr, __RED "Error: Test files lengths differ.\n" __RESET);
         break;
 
+    case ecFileIsBusy:
+        fprintf(stderr, __RED "Error: File \"%s\" is busy.\n" __RESET,
+                error.context);
+        break;
+
+    case ecFileIsDirectory:
+        fprintf(stderr, __RED "Error: \"%s\" is a directory.\n" __RESET,
+                error.context);
+        break;
+
+    case ecFileNameTooLong:
+        fprintf(stderr, __RED "Error: File name \"%s\" is too long.\n" __RESET,
+                error.context);
+        break;
+
+    case ecHardwareError:
+        fprintf(stderr,
+                __RED
+                "Error: Failed to open file \"%s\" - hardware error.\n" __RESET,
+                error.context);
+        break;
+
+    case ecNoAccesToFile:
+        fprintf(
+            stderr,
+            __RED
+            "Error: Failed to open file \"%s\" - permission denied.\n" __RESET,
+            error.context);
+        break;
+
+    case ecTooManyOpenFiles:
+        fprintf(stderr,
+                __RED "Error: Failed to open file \"%s\" - too many files "
+                      "opened.\n" __RESET,
+                error.context);
+        break;
+
+    case ecNoSpaceOnDevice:
+        fprintf(stderr,
+                __RED "Error: Failed to write in file \"%s\" - no space left "
+                      "on device.\n" __RESET,
+                error.context);
+        break;
+
+    case ecReadOnly:
+        fprintf(stderr,
+                __RED "Error: Failed to write in file \"%s\" - file is "
+                      "readonly.\n" __RESET,
+                error.context);
+        break;
+
+    case ecNotDirectory:
+        fprintf(stderr, __RED "Error: \"%s\" is not a directory.\n" __RESET,
+                error.context);
+        break;
+
     case ecUnexpectedFailure:
     default:
         fprintf(stderr, __RED "Error: Unexpected failure.\n");
@@ -55,4 +114,43 @@ Error CreateError(const ExitCode exitCode, const char *const context)
     strcpy(error.context,
            context ? context : ""); // use empty string if context is null.
     return error;
+}
+
+ExitCode TranslateErrnoCode(int errnoCode)
+{
+    switch (errnoCode)
+    {
+    case ENOENT:
+        return ecNoSuchFile;
+
+    case EACCES:
+        return ecNoAccesToFile;
+
+    case EMFILE:
+        return ecTooManyOpenFiles;
+
+    case EISDIR:
+        return ecFileIsDirectory;
+
+    case ENAMETOOLONG:
+        return ecFileNameTooLong;
+
+    case EBUSY:
+        return ecFileIsBusy;
+
+    case EIO:
+        return ecHardwareError;
+
+    case ENOSPC:
+        return ecNoSpaceOnDevice;
+
+    case EROFS:
+        return ecReadOnly;
+
+    case ENOTDIR:
+        return ecNotDirectory;
+
+    default:
+        return ecUnexpectedFailure;
+    }
 }

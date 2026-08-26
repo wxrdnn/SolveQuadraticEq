@@ -18,14 +18,14 @@ void Swap(double *const a, double *const b)
 
 bool EqualToZero(const double x)
 {
-    AssertDoubleCorrect(x);
+    ASSERT_DOUBLE_CORRECT(x);
     return Equal(x, 0);
 }
 
 bool Equal(const double x, const double y)
 {
-    AssertDoubleCorrect(x);
-    AssertDoubleCorrect(y);
+    ASSERT_DOUBLE_CORRECT(x);
+    ASSERT_DOUBLE_CORRECT(y);
     return fabs(x - y) < cCompareEpsilon;
 }
 

@@ -6,6 +6,7 @@
 #include "h/solve.h"
 #include "h/utils.h"
 #include <cctype>
+#include <cerrno>
 #include <cmath>
 #include <cstdlib>
 #include <math.h>
@@ -103,7 +104,7 @@ Error GetFirst2DegreePolynomialFromFile(Polynomial *const pp)
     FILE *fp = fopen(fileName, "r");
     if (fp == NULL)
     {
-        return CreateError(ecCantOpenFile, fileName);
+        return CreateError(TranslateErrnoCode(errno), fileName);
     }
 
     Error error = GetNext2DegreePolynomialFromFile(fp, pp, ';');
@@ -157,51 +158,45 @@ Error ParsePolynomial(const char *const s, const char separator,
 
     int coefsAmount = pp->coefsAmount;
 
-    const char *p = s;
-    int buf = 0;
-    int power = 0;
-    char sign = 1; // 1 or -1
+    const char *pl = s;
+    char *pr = NULL;
+    double buf = 0;
     int index = coefsAmount - 1;
-    while (1)
+
+    while (index >= 0)
     {
-        if (isdigit(*p))
+        buf = strtod(pl, &pr);
+
+        if (!std::isfinite(buf) || std::isnan(buf))
         {
-            buf += (*p - '0') * pow(10, power);
-            ++power;
+            return CreateError(ecParsingFailed, s);
         }
-        else if (*p == '-')
+
+        // fprintf(stderr, "index: %d, buf: %lg, pl: %s, *pr: \'%c\'\n", index,
+        //         buf, pl, *pr);
+
+        if (*pr == separator)
         {
-            sign = -sign;
-        }
-        else if (*p == '+')
-            ;
-        else if (*p == separator)
-        {
-            pp->coefs[index] = buf * sign;
-            buf = 0;
-            power = 0;
-            sign = 1;
+            pp->coefs[index] = buf;
             --index;
+            pl = pr + 1;
         }
-        else if (*p == '\n')
-            ;
-        else if (*p == '\0')
+        else if (*pr == '\0' || *pr == '\n')
         {
-            pp->coefs[index] = buf * sign;
-            return CreateError(ecSuccess, "");
+            pp->coefs[index] = buf;
+            break;
         }
         else
         {
             return CreateError(ecParsingFailed, s);
         }
-        ++p;
     }
 
     return CreateError(ecSuccess, "");
 }
 
 Error Parse2DegreeRoots(const char *const s, const char separator,
-                        Roots *const rp)
+                        Roots *const rp) // FIXME
 {
     ASSERT(s != NULL);
     ASSERT(rp != NULL);
@@ -306,7 +301,7 @@ void DisplayRoots(Roots roots)
 
 void DisplayPolynomial(Polynomial pol)
 {
-    AssertPolynomialFinite(pol);
+    AssertPolynomialCorrect(pol);
     printf(__MAGENTA "Solving ");
 
     for (int i = pol.coefsAmount; i > 0; --i)
