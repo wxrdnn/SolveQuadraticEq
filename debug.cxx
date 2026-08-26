@@ -9,7 +9,7 @@
 
 void AssertPolynomialCorrect(const Polynomial pol)
 {
-    for (int i = 0; i < pol.coefsAmount; ++i)
+    for (unsigned i = 0; i < pol.coefsAmount; ++i)
     {
         ASSERT_DOUBLE_CORRECT(pol.coefs[i]);
     }

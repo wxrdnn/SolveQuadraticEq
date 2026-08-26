@@ -11,7 +11,7 @@ const int c1DegreeCoefsAmount = 2;
 typedef struct
 {
     double coefs[cMaxCoefsAmount];
-    int coefsAmount;
+    unsigned coefsAmount;
 } Polynomial;
 
 typedef struct

@@ -16,10 +16,6 @@ int main()
     DisplayGreeting();
     DisplayCat();
 
-    // Roots roots = {};
-    // ParseRoots("1;1;1;", ';', &roots);
-    // DisplayRoots(roots);
-
     InputType inputType = AskForInputType();
     bool cycleSolve = false;
     Error error = {};

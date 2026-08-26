@@ -5,7 +5,6 @@
 #include "h/limits.h"
 #include "h/solve.h"
 #include "h/utils.h"
-#include <cctype>
 #include <cerrno>
 #include <cmath>
 #include <cstdlib>
@@ -156,14 +155,66 @@ Error ParsePolynomial(const char *const s, const char separator,
     ASSERT(s != NULL);
     ASSERT(pp != NULL);
 
-    int coefsAmount = pp->coefsAmount;
+    double arr[cMaxCoefsAmount] = {};
 
+    Error error = ParseNDoubles(s, pp->coefsAmount, arr, separator);
+    if (error.exitCode != ecSuccess)
+    {
+        return error;
+    }
+
+    unsigned index = 0;
+    while (index < pp->coefsAmount)
+    {
+        ASSERT(pp->coefsAmount > index)
+        unsigned coefIndex = pp->coefsAmount - 1 - index;
+        ASSERT(index < cMaxCoefsAmount)
+
+        pp->coefs[coefIndex] = arr[index];
+        index++;
+    }
+
+    return error;
+}
+
+Error Parse2DegreeRoots(const char *const s, const char separator,
+                        Roots *const rp) // FIXME
+{
+    ASSERT(s != NULL);
+    ASSERT(rp != NULL);
+
+    *rp = {};
+    int nRoots = 0;
+
+    if (sscanf(s, "%d", &nRoots) != 1)
+    {
+        return CreateError(ecParsingFailed, s);
+    }
+
+    double arr[cMaxRootsAmount];
+    Error error =
+        ParseNDoubles(s, (unsigned)(nRoots > 0 ? nRoots : 0), arr, separator);
+    if (error.exitCode != ecSuccess)
+    {
+        return error;
+    }
+
+    rp->rootsAmount = nRoots;
+    rp->roots[0] = arr[1]; // because arr[0] is roots number
+    rp->roots[1] = arr[2];
+    AssertRootsFinite(*rp);
+    return error;
+}
+
+Error ParseNDoubles(const char *const s, const unsigned n, double *const arr,
+                    const char separator)
+{
     const char *pl = s;
     char *pr = NULL;
     double buf = 0;
-    int index = coefsAmount - 1;
+    unsigned index = 0;
 
-    while (index >= 0)
+    while (index < n)
     {
         buf = strtod(pl, &pr);
 
@@ -177,13 +228,13 @@ Error ParsePolynomial(const char *const s, const char separator,
 
         if (*pr == separator)
         {
-            pp->coefs[index] = buf;
-            --index;
+            arr[index] = buf;
+            ++index;
             pl = pr + 1;
         }
         else if (*pr == '\0' || *pr == '\n')
         {
-            pp->coefs[index] = buf;
+            arr[index] = buf;
             break;
         }
         else
@@ -193,56 +244,6 @@ Error ParsePolynomial(const char *const s, const char separator,
     }
 
     return CreateError(ecSuccess, "");
-}
-
-Error Parse2DegreeRoots(const char *const s, const char separator,
-                        Roots *const rp) // FIXME
-{
-    ASSERT(s != NULL);
-    ASSERT(rp != NULL);
-
-    *rp = {};
-    Error success = CreateError(ecSuccess, "");
-    int nRoots = 0;
-    double x1 = 0, x2 = 0;
-    char fmt[cMaxLine] = {};
-
-    if (sscanf(s, "%d", &nRoots) != 1)
-    {
-        return CreateError(ecParsingFailed, s);
-    }
-
-    rp->rootsAmount = nRoots;
-
-    switch (nRoots)
-    {
-    case 1:
-        sprintf(fmt, "%%d%c%%lg%c", separator, separator);
-        if (sscanf(s, fmt, &nRoots, &x1) != 2)
-        {
-            return CreateError(ecParsingFailed, "");
-        }
-        break;
-
-    case 2:
-        sprintf(fmt, "%%d%c%%lg%c%%lg%c", separator, separator, separator);
-        if (sscanf(s, fmt, &nRoots, &x1, &x2) != 3)
-        {
-            return CreateError(ecParsingFailed, "");
-        }
-        break;
-
-    case 0:
-    case cInfiniteRootsAmount:
-    default:
-        break;
-    }
-
-    rp->rootsAmount = nRoots;
-    rp->roots[0] = x1;
-    rp->roots[1] = x2;
-    AssertRootsFinite(*rp);
-    return success;
 }
 
 bool AskForCycleSolve()
@@ -304,13 +305,13 @@ void DisplayPolynomial(Polynomial pol)
     AssertPolynomialCorrect(pol);
     printf(__MAGENTA "Solving ");
 
-    for (int i = pol.coefsAmount; i > 0; --i)
+    for (unsigned i = pol.coefsAmount; i > 0; --i)
     {
         if (i > 2)
         {
             printf(pol.coefs[i - 1] > 0 || EqualToZero(pol.coefs[i - 1]) ? ""
                                                                          : "-");
-            printf("%lg*x%d", fabs(pol.coefs[i - 1]), i - 1);
+            printf("%lg*x%u", fabs(pol.coefs[i - 1]), i - 1);
             printf(pol.coefs[i - 2] > 0 ? " + " : " - ");
         }
         else if (i == 2)

@@ -4,13 +4,12 @@
 
 void DisplayCat()
 {
-    printf("%s", __YELLOW // TODO fix code view
-           "  /\\___/\\\n"
-           " ( o   o )\n"
-           " (  =^=  )\n"
-           " (        )\n"
-           " (         )\n"
-           " (          ))))))))))))\n\n" __RESET);
+    printf("%s", __YELLOW "  /\\___/\\\n"
+                          " ( o   o )\n"
+                          " (  =^=  )\n"
+                          " (        )\n"
+                          " (         )\n"
+                          " (          ))))))))))))\n\n" __RESET);
 }
 
 void DisplaySadCat()

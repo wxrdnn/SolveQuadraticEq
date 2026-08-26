@@ -32,6 +32,9 @@ Error ParsePolynomial(const char *const s, const char separator,
 Error Parse2DegreeRoots(const char *const s, const char separator,
                         Roots *const rp);
 
+Error ParseNDoubles(const char *const s, const unsigned n, double *const arr,
+                    const char separator);
+
 bool AskForCycleSolve();
 
 void DisplayGreeting();
