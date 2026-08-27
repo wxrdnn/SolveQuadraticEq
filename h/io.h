@@ -22,8 +22,18 @@ Error GetNext2DegreePolynomialFromFile(FILE *const fp, Polynomial *const pp,
 Error GetNext2DegreeRootsFromFile(FILE *const fp, Roots *const rp,
                                   const char separator);
 
+//----------------------------------------------------------
+//! Asks User for input type in terminal.
+//!
+//! @return InputType enum
+//----------------------------------------------------------
 InputType AskForInputType();
 
+//----------------------------------------------------------
+//! Asks User for file name in terminal.
+//!
+//! @param [out] fileName User's input.
+//----------------------------------------------------------
 void AskForFileName(char *const fileName);
 
 Error ParsePolynomial(const char *const s, const char separator,
@@ -35,8 +45,16 @@ Error Parse2DegreeRoots(const char *const s, const char separator,
 Error ParseNDoubles(const char *const s, const unsigned n, double *const arr,
                     const char separator);
 
+//----------------------------------------------------------
+//! Asks User for cycle solve all equations from file.
+//!
+//! @return True if User choosed cycle solve, otherwise false.
+//----------------------------------------------------------
 bool AskForCycleSolve();
 
+//----------------------------------------------------------
+//! Displays Author and programm name.
+//----------------------------------------------------------
 void DisplayGreeting();
 
 void DisplayRoots(const Roots roots);

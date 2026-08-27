@@ -21,36 +21,49 @@ typedef struct
 } Roots;
 
 //----------------------------------------------------------
-//! Solves a quadratic equation ax2 + bx + c = 0
+//! Solves a quadratic equation ax2 + bx + c = 0.
 //!
-//! @param [in] a a-coefficient
-//! @param [in] b a-coefficient
-//! @param [in] c a-coefficient
+//! @param [in] pol Polynomial struct, contains amount of coefficients and their
+//! values.
 //!
-//! @return Roots structure contains amount of roots and their values by
+//! @return Roots structure, contains amount of roots and their values by
 //! ascending.
 //!
-//! @note In case of infinite number of roots, returns SLE_INFINITE_ROOTS.
+//! @note In case of infinite number of roots, returns cInfiniteRootsAmount.
 //----------------------------------------------------------
-
 Roots SolveQuadraticEquation(const Polynomial pol);
 
 //----------------------------------------------------------
-//! Solves a linear equation ax + b = 0
+//! Solves a linear equation ax + b = 0.
 //!
-//! @param [in] a a-coefficient
-//! @param [in] b a-coefficient
-//! @param [out] x Pointer to the root
+//! @param [in] pol Polynomial struct, contains amount of coefficients and their
+//! values.
 //!
-//! @return Number of roots
+//! @return Roots structure, contains amount of roots and their values by
+//! ascending.
 //!
-//! @note In case of infinite number of roots, returns SLE_INFINITE_ROOTS.
+//! @note In case of infinite number of roots, returns cInfiniteRootsAmount.
 //----------------------------------------------------------
-
 Roots SolveLinearEquation(const Polynomial pol);
 
+//----------------------------------------------------------
+//! Calculates discriminant of 2-degree polynomial: D = b2 - 4*a*c.
+//!
+//! @param [in] pol Polynomial struct, contains amount of coefficients and their
+//! values.
+//!
+//! @return Discriminant value.
+//----------------------------------------------------------
 double Get2DegreeDiscriminant(const Polynomial pol);
 
+//----------------------------------------------------------
+//! Compares two Roots structures.
+//!
+//! @param [in] r1 First Roots structure to compare.
+//! @param [in] r2 Second Roots structure to compare.
+//!
+//! @return True if the Roots structures are equal, otherwise false.
+//----------------------------------------------------------
 bool EqualRoots(const Roots r1, const Roots r2);
 
 #endif

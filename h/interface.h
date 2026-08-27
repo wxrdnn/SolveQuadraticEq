@@ -7,7 +7,8 @@
 #include "solve.h"
 
 Error SolveSingle(const InputType inputType);
-Error ProcessArgs(const int argc, const char *const argv[]);
+// TODO
+// Error ProcessArgs(const int argc, const char *const argv[]);
 Error SolveCycle();
 
 #endif
