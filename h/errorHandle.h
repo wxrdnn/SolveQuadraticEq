@@ -23,6 +23,7 @@ enum ExitCode
     ecNoSpaceOnDevice = 14,
     ecReadOnly = 15,
     ecNotDirectory = 16,
+    ecWrongUsage = 17,
 };
 
 typedef struct

@@ -1,6 +1,5 @@
 #include "h/test.h"
 #include "h/colors.h"
-#include "h/displayCats.h"
 #include "h/errorHandle.h"
 #include "h/io.h"
 #include "h/limits.h"
@@ -10,15 +9,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void TestRandom(int testAmount);
+// int main()
+// {
+//     DisplayGreeting();
+//     DisplayCat();
 
-int main()
-{
-    DisplayGreeting();
-    DisplayCat();
-
-    return HandleError(RunTests()).exitCode;
-}
+//     return HandleError(RunTests()).exitCode;
+// }
 
 bool RunSingleTest(const Polynomial pol, const Roots refRoots)
 {
@@ -45,7 +42,9 @@ Error RunTests()
     char polynomialsFileName[cMaxLine] = {};
     char refRootsFileName[cMaxLine] = {};
 
+    printf(__GREEN "Select coefficients file\n" __RESET);
     AskForFileName(polynomialsFileName);
+    printf(__GREEN "Select ref roots file\n" __RESET);
     AskForFileName(refRootsFileName);
 
     FILE *fppols = fopen(polynomialsFileName, "r");

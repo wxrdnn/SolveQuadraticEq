@@ -99,9 +99,14 @@ Error HandleError(Error error)
                 error.context);
         break;
 
+    case ecWrongUsage:
+        fprintf(stderr, __YELLOW "Usage: solve [OPTION]\n\nOptions:\n\t "
+                                 "-t\tLaunch in unit test mode\n" __RESET);
+        break;
+
     case ecUnexpectedFailure:
     default:
-        fprintf(stderr, __RED "Error: Unexpected failure.\n");
+        fprintf(stderr, __RED "Error: Unexpected failure.\n" __RESET);
         break;
     }
     return error;
