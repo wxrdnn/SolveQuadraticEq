@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 {
     Error error = {};
 
-    if (argc > 2)
+    if (argc > 2) // TODO Extract function
     {
         error = CreateError(ecWrongUsage, "");
         return HandleError(error).exitCode;
