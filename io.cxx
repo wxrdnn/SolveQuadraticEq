@@ -5,11 +5,10 @@
 #include "h/limits.h"
 #include "h/solve.h"
 #include "h/utils.h"
-#include <cerrno>
-#include <cmath>
-#include <cstdlib>
+#include <errno.h>
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 void Get2DegreePolynomialFromKeyboard(Polynomial *const pp);

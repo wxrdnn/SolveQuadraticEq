@@ -1,11 +1,10 @@
 #include "h/interface.h"
-#include "h/debug.h"
 #include "h/errorHandle.h"
 #include "h/io.h"
 #include "h/limits.h"
 #include "h/solve.h"
 #include "h/utils.h"
-#include <cerrno>
+#include <errno.h>
 
 //! returned ExitCodes are
 Error SolveSingle(const InputType inputType)

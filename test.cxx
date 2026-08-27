@@ -6,8 +6,8 @@
 #include "h/limits.h"
 #include "h/solve.h"
 #include "h/utils.h"
-#include <cerrno>
-#include <cstdio>
+#include <errno.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 void TestRandom(int testAmount);

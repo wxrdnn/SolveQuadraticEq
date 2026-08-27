@@ -1,5 +1,4 @@
 #include "h/debug.h"
-#include "h/solve.h"
 #include <math.h>
 
 // void ASSERT_DOUBLE_CORRECT(const double x)

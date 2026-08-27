@@ -1,4 +1,3 @@
-#include "h/debug.h"
 #include "h/displayCats.h"
 #include "h/errorHandle.h"
 #include "h/interface.h"

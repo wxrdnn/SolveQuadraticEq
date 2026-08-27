@@ -1,9 +1,9 @@
 #include "h/errorHandle.h"
 #include "h/colors.h"
 #include "h/utils.h"
-#include "string.h"
-#include <cerrno>
+#include <errno.h>
 #include <stdio.h>
+#include <string.h>
 
 Error HandleError(Error error)
 {

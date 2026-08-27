@@ -1,7 +1,6 @@
 #include "h/solve.h"
 #include "h/debug.h"
 #include "h/utils.h"
-#include <cstdio>
 #include <math.h>
 
 Roots SolveTrueQuadraticEquation(const Polynomial pol);
