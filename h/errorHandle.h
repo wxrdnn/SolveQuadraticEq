@@ -36,6 +36,6 @@ Error HandleError(Error error);
 
 Error CreateError(const ExitCode exitCode, const char *const context);
 
-ExitCode TranslateErrnoCode(int errnoCode);
+ExitCode TranslateErrnoCode(const int errnoCode);
 
 #endif

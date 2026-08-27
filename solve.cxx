@@ -19,7 +19,7 @@ Roots SolveQuadraticEquation(const Polynomial pol)
     }
 }
 
-Roots SolveLinearEquation(Polynomial pol)
+Roots SolveLinearEquation(const Polynomial pol)
 { // ax + b = 0
     double b = pol.coefs[0];
     double a = pol.coefs[1];
@@ -45,7 +45,7 @@ Roots SolveLinearEquation(Polynomial pol)
     return roots;
 }
 
-Roots SolveTrueQuadraticEquation(Polynomial pol)
+Roots SolveTrueQuadraticEquation(const Polynomial pol)
 {
     // double c = pol.coefs[0]; <- unused variable
     double b = pol.coefs[1];

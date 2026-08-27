@@ -13,8 +13,7 @@
 
 void Get2DegreePolynomialFromKeyboard(Polynomial *const pp);
 
-void Get2DegreePolynomialFromKeyboard(
-    Polynomial *const pp) // FIX error handling
+void Get2DegreePolynomialFromKeyboard(Polynomial *const pp)
 {
     ASSERT(pp != NULL);
 
@@ -177,7 +176,7 @@ Error ParsePolynomial(const char *const s, const char separator,
 }
 
 Error Parse2DegreeRoots(const char *const s, const char separator,
-                        Roots *const rp) // FIXME
+                        Roots *const rp)
 {
     ASSERT(s != NULL);
     ASSERT(rp != NULL);
@@ -278,7 +277,7 @@ void DisplayGreeting()
     return;
 }
 
-void DisplayRoots(Roots roots)
+void DisplayRoots(const Roots roots)
 {
     ASSERT(roots.rootsAmount >= 0 || roots.rootsAmount == cInfiniteRootsAmount);
     ASSERT_ROOTS_FINITE(roots);
@@ -310,7 +309,7 @@ void DisplayRoots(Roots roots)
     return;
 }
 
-void DisplayPolynomial(Polynomial pol)
+void DisplayPolynomial(const Polynomial pol)
 {
     ASSERT_POLYNOMIAL_CORRECT(pol);
     printf(__MAGENTA "Solving ");
@@ -341,7 +340,7 @@ void DisplayPolynomial(Polynomial pol)
 }
 
 //! works with opened files only
-bool FileIsEmpty(FILE *fp)
+bool FileIsEmpty(FILE *const fp)
 {
     ASSERT(fp != NULL);
 

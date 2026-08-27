@@ -43,7 +43,7 @@ void DisplayRoots(const Roots roots);
 
 void DisplayPolynomial(const Polynomial pol);
 
-bool FileIsEmpty(FILE *fp);
+bool FileIsEmpty(FILE *const fp);
 
 //! returns correct input, otherwise 0
 int GetNum();
