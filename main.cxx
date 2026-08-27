@@ -7,9 +7,6 @@
 
 int main()
 {
-    // TODO File output
-    // TODO solve cycle from keyboard
-
     // ASSERT_DOUBLE_CORRECT(INFINITY);
 
     DisplayGreeting();

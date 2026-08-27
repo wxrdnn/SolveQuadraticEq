@@ -190,13 +190,20 @@ Error Parse2DegreeRoots(const char *const s, const char separator,
         return CreateError(ecParsingFailed, s);
     }
 
-    double arr[cMaxRootsAmount];
-    Error error =
-        ParseNDoubles(s, (unsigned)(nRoots > 0 ? nRoots : 0), arr, separator);
+    // fprintf(stderr, "nRoots: %d\n", nRoots); // DEBUG
+
+    double arr[cMaxRootsAmount] = {};
+    Error error = ParseNDoubles(
+        s, (unsigned)(nRoots > 0 ? nRoots + 1 : 0), arr,
+        separator); // nRoots + 1 because first number is roots amount
     if (error.exitCode != ecSuccess)
     {
         return error;
     }
+
+    // fprintf(stderr, "arr[0]: %lg, arr[1]: %lg, arr[2]: %lg\n", arr[0],
+    // arr[1],
+    //         arr[2]);
 
     rp->rootsAmount = nRoots;
     rp->roots[0] = arr[1]; // because arr[0] is roots number
@@ -208,6 +215,9 @@ Error Parse2DegreeRoots(const char *const s, const char separator,
 Error ParseNDoubles(const char *const s, const unsigned n, double *const arr,
                     const char separator)
 {
+    ASSERT(s != NULL);
+    ASSERT(arr != NULL);
+
     const char *pl = s;
     char *pr = NULL;
     double buf = 0;
@@ -217,13 +227,14 @@ Error ParseNDoubles(const char *const s, const unsigned n, double *const arr,
     {
         buf = strtod(pl, &pr);
 
-        if (!std::isfinite(buf) || std::isnan(buf))
+        if (!isfinite(buf) || isnan(buf))
         {
+            // fprintf(stderr, "Wrong double\n"); // DEBUG
             return CreateError(ecParsingFailed, s);
         }
 
-        // fprintf(stderr, "index: %d, buf: %lg, pl: %s, *pr: \'%c\'\n", index,
-        //         buf, pl, *pr);
+        // fprintf(stderr, "index: %u, buf: %lg, pl: %s, *pr: \'%c\'\n", index,
+        //         buf, pl, *pr); // DEBUG
 
         if (*pr == separator)
         {
