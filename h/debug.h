@@ -33,7 +33,19 @@
 
 #define ASSERT_DOUBLE_CORRECT(x) ASSERT(isfinite(x))
 
-void AssertPolynomialCorrect(const Polynomial pol);
-void AssertRootsFinite(const Roots roots);
+#define ASSERT_POLYNOMIAL_CORRECT(pol__)                                       \
+    {                                                                          \
+        for (unsigned i = 0; i < (pol__).coefsAmount; ++i)                     \
+        {                                                                      \
+            ASSERT_DOUBLE_CORRECT((pol__).coefs[i]);                           \
+        }                                                                      \
+    }
+#define ASSERT_ROOTS_FINITE(roots__)                                           \
+    {                                                                          \
+        for (int i = 0; i < (roots__).rootsAmount; ++i)                        \
+        {                                                                      \
+            ASSERT_DOUBLE_CORRECT((roots__).roots[i]);                         \
+        }                                                                      \
+    }
 
 #endif

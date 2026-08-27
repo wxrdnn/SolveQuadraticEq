@@ -202,7 +202,7 @@ Error Parse2DegreeRoots(const char *const s, const char separator,
     rp->rootsAmount = nRoots;
     rp->roots[0] = arr[1]; // because arr[0] is roots number
     rp->roots[1] = arr[2];
-    AssertRootsFinite(*rp);
+    ASSERT_ROOTS_FINITE(*rp);
     return error;
 }
 
@@ -271,7 +271,7 @@ void DisplayGreeting()
 void DisplayRoots(Roots roots)
 {
     ASSERT(roots.rootsAmount >= 0 || roots.rootsAmount == cInfiniteRootsAmount);
-    AssertRootsFinite(roots);
+    ASSERT_ROOTS_FINITE(roots);
 
     if (roots.rootsAmount > 1)
     {
@@ -302,7 +302,7 @@ void DisplayRoots(Roots roots)
 
 void DisplayPolynomial(Polynomial pol)
 {
-    AssertPolynomialCorrect(pol);
+    ASSERT_POLYNOMIAL_CORRECT(pol);
     printf(__MAGENTA "Solving ");
 
     for (unsigned i = pol.coefsAmount; i > 0; --i)

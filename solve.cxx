@@ -8,7 +8,7 @@ Roots SolveTrueQuadraticEquation(const Polynomial pol);
 
 Roots SolveQuadraticEquation(const Polynomial pol)
 {
-    AssertPolynomialCorrect(pol);
+    ASSERT_POLYNOMIAL_CORRECT(pol);
 
     if (EqualToZero(pol.coefs[2]))
     {
@@ -25,7 +25,7 @@ Roots SolveLinearEquation(Polynomial pol)
     double b = pol.coefs[0];
     double a = pol.coefs[1];
 
-    AssertPolynomialCorrect(pol);
+    ASSERT_POLYNOMIAL_CORRECT(pol);
 
     Roots roots = {0};
 
@@ -42,7 +42,7 @@ Roots SolveLinearEquation(Polynomial pol)
     double root = -b / a;
     roots.rootsAmount = 1;
     roots.roots[0] = EqualToZero(root) ? 0 : root;
-    AssertRootsFinite(roots);
+    ASSERT_ROOTS_FINITE(roots);
     return roots;
 }
 
@@ -52,7 +52,7 @@ Roots SolveTrueQuadraticEquation(Polynomial pol)
     double b = pol.coefs[1];
     double a = pol.coefs[2];
 
-    AssertPolynomialCorrect(pol);
+    ASSERT_POLYNOMIAL_CORRECT(pol);
 
     Roots roots = {0};
 
@@ -84,7 +84,7 @@ Roots SolveTrueQuadraticEquation(Polynomial pol)
         roots.rootsAmount = 0;
     }
 
-    AssertRootsFinite(roots);
+    ASSERT_ROOTS_FINITE(roots);
     return roots;
 }
 
@@ -94,7 +94,7 @@ double Get2DegreeDiscriminant(const Polynomial pol)
     double b = pol.coefs[1];
     double a = pol.coefs[2];
 
-    AssertPolynomialCorrect(pol);
+    ASSERT_POLYNOMIAL_CORRECT(pol);
 
     return b * b - 4 * a * c;
 }
