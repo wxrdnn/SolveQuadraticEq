@@ -2,6 +2,7 @@
 #include "h/colors.h"
 #include "h/debug.h"
 #include "h/errorHandle.h"
+#include "h/interface.h"
 #include "h/limits.h"
 #include "h/solve.h"
 #include "h/utils.h"
@@ -211,25 +212,25 @@ Error Parse2DegreeRoots(const char *const s, const char separator,
     return error;
 }
 
-Error ParseNDoubles(const char *const s, const unsigned n, double *const arr,
-                    const char separator)
+Error ParseNDoubles(const char *const input, const unsigned nItems,
+                    double *const arr, const char separator)
 {
-    ASSERT(s != NULL);
+    ASSERT(input != NULL);
     ASSERT(arr != NULL);
 
-    const char *pl = s;
+    const char *pl = input;
     char *pr = NULL;
     double buf = 0;
     unsigned index = 0;
 
-    while (index < n)
+    while (index < nItems)
     {
         buf = strtod(pl, &pr);
 
         if (!isfinite(buf) || isnan(buf))
         {
             // fprintf(stderr, "Wrong double\n"); // DEBUG
-            return CreateError(ecParsingFailed, s);
+            return CreateError(ecParsingFailed, input);
         }
 
         // fprintf(stderr, "index: %u, buf: %lg, pl: %s, *pr: \'%c\'\n", index,
@@ -248,7 +249,7 @@ Error ParseNDoubles(const char *const s, const unsigned n, double *const arr,
         }
         else
         {
-            return CreateError(ecParsingFailed, s);
+            return CreateError(ecParsingFailed, input);
         }
     }
 
@@ -339,19 +340,40 @@ void DisplayPolynomial(const Polynomial pol)
     return;
 }
 
-//! works with opened files only
-bool FileIsEmpty(FILE *const fp)
+void DisplayMode(const Mode mode)
 {
-    ASSERT(fp != NULL);
-
-    int c = 0; // default value
-    if ((c = getc(fp)) == EOF)
+    printf(__BLUE);
+    switch (mode)
     {
-        return true;
-    }
+    default:
+    case mSolveSquare:
+        printf("%s", "# Running in solve mode\n\n");
+        break;
 
-    ungetc(c, fp);
-    return false;
+    case mTestSquare:
+        printf("%s", "# Running in unit-test mode\n\n");
+        break;
+
+    case mGraphing:
+        printf("%s", "# Running in graphing mode\n\n");
+        break;
+    }
+    printf(__RESET);
+
+    return;
+}
+
+void DisplayHelp()
+{
+    printf("Usage: solve [OPTION]\n\n"
+           "Options:\n"
+           "\t-s, --solve\n"
+           "\t\tLaunch in solve mode.\n\n"
+           "\t-g, --graphing\n"
+           "\t\tLaunch in graphing mode.\n\n"
+           "\t-t, --test\n"
+           "\t\tLaunch in unit test mode.\n\n");
+    return;
 }
 
 int GetNum()

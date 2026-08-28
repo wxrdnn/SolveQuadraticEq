@@ -3,14 +3,9 @@
 #define IO_H
 
 #include "errorHandle.h"
+#include "interface.h"
 #include "solve.h"
 #include <stdio.h>
-
-enum InputType
-{
-    itKeyborad = 0,
-    itFile = 1,
-};
 
 Error Get2DegreePolynomial(const InputType inputType, Polynomial *const pp);
 
@@ -23,14 +18,14 @@ Error GetNext2DegreeRootsFromFile(FILE *const fp, Roots *const rp,
                                   const char separator);
 
 //----------------------------------------------------------
-//! Asks User for input type in terminal.
+//! Asks User for input type in terminal (stdin).
 //!
 //! @return InputType enum
 //----------------------------------------------------------
 InputType AskForInputType();
 
 //----------------------------------------------------------
-//! Asks User for file name in terminal.
+//! Asks User for file name in terminal (stdin).
 //!
 //! @param [out] fileName User's input.
 //----------------------------------------------------------
@@ -42,28 +37,44 @@ Error ParsePolynomial(const char *const s, const char separator,
 Error Parse2DegreeRoots(const char *const s, const char separator,
                         Roots *const rp);
 
-Error ParseNDoubles(const char *const s, const unsigned n, double *const arr,
-                    const char separator);
+Error ParseNDoubles(const char *const input, const unsigned nItems,
+                    double *const arr, const char separator);
 
 //----------------------------------------------------------
-//! Asks User for cycle solve all equations from file.
+//! Asks User in terminal (stdin) for cycle solve all equations from file.
 //!
 //! @return True if User choosed cycle solve, otherwise false.
 //----------------------------------------------------------
 bool AskForCycleSolve();
 
 //----------------------------------------------------------
-//! Displays Author and programm name.
+//! Displays Author and program name (stdout).
 //----------------------------------------------------------
 void DisplayGreeting();
 
+//----------------------------------------------------------
+//! Display Roots structure in terminal (stdout).
+//!
+//! @param [in] roots Roots structure to display.
+//----------------------------------------------------------
 void DisplayRoots(const Roots roots);
 
+//----------------------------------------------------------
+//! Display Polynomial structure in terminal (stdout).
+//!
+//! @param [in] pol Polynomial structure to display.
+//----------------------------------------------------------
 void DisplayPolynomial(const Polynomial pol);
 
-bool FileIsEmpty(FILE *const fp);
+void DisplayMode(const Mode mode);
 
-//! returns correct input, otherwise 0
+void DisplayHelp();
+
+//----------------------------------------------------------
+//! Reads a number from User's input (stdin). If input is incorrect, returns 0.
+//!
+//! @return Number from User's input or 0.
+//----------------------------------------------------------
 int GetNum();
 
 #endif

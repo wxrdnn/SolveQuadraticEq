@@ -63,3 +63,17 @@ void ClearBuffer()
         ;
     return;
 }
+
+bool FileIsEmpty(FILE *const fp)
+{
+    ASSERT(fp != NULL);
+
+    int c = 0; // default value
+    if ((c = getc(fp)) == EOF)
+    {
+        return true;
+    }
+
+    ungetc(c, fp);
+    return false;
+}

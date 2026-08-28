@@ -1,5 +1,7 @@
 #include "h/errorHandle.h"
 #include "h/colors.h"
+#include "h/debug.h"
+#include "h/io.h"
 #include "h/utils.h"
 #include <errno.h>
 #include <stdio.h>
@@ -7,6 +9,7 @@
 
 Error HandleError(Error error)
 {
+    ASSERT(error.context != NULL);
     ReplaceNewLineCharWithNullTerminator(error.context);
     switch (error.exitCode)
     {
@@ -100,8 +103,7 @@ Error HandleError(Error error)
         break;
 
     case ecWrongUsage:
-        fprintf(stderr, __YELLOW "Usage: solve [OPTION]\n\nOptions:\n\t "
-                                 "-t\tLaunch in unit test mode\n" __RESET);
+        DisplayHelp();
         break;
 
     case ecUnexpectedFailure:

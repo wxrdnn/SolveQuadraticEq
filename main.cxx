@@ -2,47 +2,30 @@
 #include "h/errorHandle.h"
 #include "h/interface.h"
 #include "h/io.h"
-#include "h/test.h"
 #include <math.h>
 #include <stdlib.h>
-#include <string.h>
 
 int main(int argc, char *argv[])
 {
-    Error error = {};
+    LaunchOptions launchOptions = {};
 
-    if (argc > 2) // TODO Extract function
+    Error error = ProcessArgs((unsigned)argc, argv, &launchOptions);
+
+    if (error.exitCode != ecSuccess)
     {
-        error = CreateError(ecWrongUsage, "");
-        return HandleError(error).exitCode;
+        HandleError(error);
+        return error.exitCode;
     }
 
-    if (argc > 1 && strcmp(argv[1], "-t") == 0)
+    if (!launchOptions.displayHelp)
     {
-        error = RunTests();
-        return HandleError(error).exitCode;
+        DisplayGreeting();
+        DisplayCat();
+        DisplayMode(launchOptions.mode);
     }
 
-    // ASSERT_DOUBLE_CORRECT(INFINITY);
+    error = LaunchProgram(&launchOptions);
 
-    DisplayGreeting();
-    DisplayCat();
-
-    InputType inputType = AskForInputType();
-    bool cycleSolve = false;
-
-    if (inputType == itFile)
-    {
-        cycleSolve = AskForCycleSolve();
-    }
-
-    if (cycleSolve)
-    {
-        error = HandleError(SolveCycle());
-    }
-    else
-    {
-        error = HandleError(SolveSingle(inputType));
-    }
+    HandleError(error);
     return error.exitCode;
 }

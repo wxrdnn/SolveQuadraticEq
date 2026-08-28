@@ -6,6 +6,9 @@
 
 const double cCompareEpsilon = 1e-4;
 
+//----------------------------------------------------------
+//! Checks if two double numbers are equal with error rate
+//----------------------------------------------------------
 bool Equal(const double x, const double y);
 
 bool EqualToZero(const double x);
@@ -17,5 +20,7 @@ long CountLinesOfFile(FILE *const fp);
 void ReplaceNewLineCharWithNullTerminator(char *const s);
 
 void ClearBuffer();
+
+bool FileIsEmpty(FILE *const fp);
 
 #endif

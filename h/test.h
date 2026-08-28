@@ -7,6 +7,4 @@
 
 bool RunSingleTest(const Polynomial pol, const Roots roots);
 
-Error RunTests();
-
 #endif
