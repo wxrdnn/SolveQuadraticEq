@@ -26,11 +26,11 @@ enum ExitCode
     ecWrongUsage = 17,
 };
 
-typedef struct
+struct Error
 {
     ExitCode exitCode;
     char context[cMaxLine];
-} Error;
+};
 
 //----------------------------------------------------------
 //! Prints error message based on the Error structure data.

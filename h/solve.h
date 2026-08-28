@@ -8,17 +8,17 @@ const int cInfiniteRootsAmount = -1;
 const int c2DegreeCoefsAmount = 3;
 const int c1DegreeCoefsAmount = 2;
 
-typedef struct
+struct Polynomial
 {
     double coefs[cMaxCoefsAmount];
     unsigned coefsAmount;
-} Polynomial;
+};
 
-typedef struct
+struct Roots
 {
     double roots[cMaxRootsAmount];
     int rootsAmount;
-} Roots;
+};
 
 //----------------------------------------------------------
 //! Solves a quadratic equation ax2 + bx + c = 0.
