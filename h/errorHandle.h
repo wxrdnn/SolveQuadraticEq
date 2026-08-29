@@ -24,6 +24,7 @@ enum ExitCode
     ecReadOnly = 15,
     ecNotDirectory = 16,
     ecWrongUsage = 17,
+    ecUnsupportedPolynomial = 18,
 };
 
 struct Error

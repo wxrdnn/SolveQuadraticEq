@@ -9,6 +9,7 @@
 #include "h/utils.h"
 #include <SDL2/SDL.h>
 #include <TXLin.h>
+#include <cmath>
 #include <errno.h>
 #include <string.h>
 
@@ -66,8 +67,7 @@ Error SolveCycle()
     return CreateError(ecSuccess, "");
 }
 
-Error ProcessArgs(const unsigned argc, const char *const argv[],
-                  LaunchOptions *const lp)
+Error ProcessArgs(const unsigned argc, const char *const argv[], LaunchOptions *const lp)
 {
     lp->mode = mSolveSquare; // default value
 
@@ -209,6 +209,11 @@ Error LaunchTestMode()
 Error LaunchGraphingMode()
 {
     InitGraph();
+
+    Polynomial pol = {.coefs{0, 0, -2}, .coefsAmount = 3};
+    DrawFunction(&pol);
+    pol.coefs[0] = 2;
+    pol.coefs[1] = 2;
 
     KeepWindowOpen();
     return CreateError(ecSuccess, "");

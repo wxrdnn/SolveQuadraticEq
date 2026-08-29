@@ -1,8 +1,13 @@
 #include "h/graphing.h"
 #include "TXLin.h"
+#include "h/debug.h"
+#include "h/errorHandle.h"
 #include "h/limits.h"
+#include "h/solve.h"
 #include "h/utils.h"
+#include <cmath>
 #include <stdio.h>
+#include <sys/types.h>
 
 const unsigned cXWindowSize = 1600;
 const unsigned cYWindowSize = 1600;
@@ -11,10 +16,14 @@ const unsigned cYDivisionsNumber = 10;
 const unsigned cDivisionMarkLength = 20;
 const unsigned cFontSize = 40;
 
-const double cScale = 100;
+const double cScale = 0.00625; // FIXME
 
 void DrawXAxisDivisions();
 void DrawYAxisDivisions();
+double ValueToScreenPosX(const double x);
+double ValueToScreenPosY(const double y);
+double ScreenPosToValueX(const double x);
+double ScreenPosToValueY(const double y);
 
 void InitGraph()
 {
@@ -44,7 +53,7 @@ void KeepWindowOpen()
 
 void DrawGraphAxis()
 {
-    txLine(0, (int)(cYWindowSize / 2), cXWindowSize, (int)(cXWindowSize / 2));
+    txLine(0, (int)(cYWindowSize / 2), cXWindowSize, (int)(cYWindowSize / 2));
     txLine((int)(cXWindowSize / 2), 0, (int)(cXWindowSize / 2), cYWindowSize);
     DrawXAxisDivisions();
     DrawYAxisDivisions();
@@ -91,7 +100,7 @@ void DrawYAxisDivisions()
         txLine(x1, y, x2, y);
 
         char num[cMaxLine] = {};
-        double yDivValue = (y - (double)cYWindowSize / 2) * cScale;
+        double yDivValue = -(y - (double)cYWindowSize / 2) * cScale;
 
         if (!EqualToZero(yDivValue))
         {
@@ -104,4 +113,125 @@ void DrawYAxisDivisions()
     }
 
     return;
+}
+
+Error DrawFunction(const Polynomial *const pp)
+{
+    ASSERT(pp);
+    ASSERT_POLYNOMIAL_CORRECT(*pp);
+
+    switch (pp->coefsAmount)
+    {
+    case 1:
+    case 2:
+        DrawLinear(pp);
+
+    case 3:
+        DrawParabola(pp);
+
+    default:
+        return CreateError(ecUnsupportedPolynomial, "");
+    }
+}
+
+void DrawLinear(const Polynomial *const pp)
+{
+    ASSERT(pp);
+    ASSERT_POLYNOMIAL_CORRECT(*pp);
+
+    double a = pp->coefs[1];
+    double b = pp->coefs[0]; // y = ax + b
+
+    double x1 = 0;
+    double y1 = 0;
+    double x2 = 0;
+    double y2 = 0;
+
+    if (abs(a) <= 1)
+    {
+        x1 = 0;
+        y1 = cYWindowSize / 2 - (a * (x1 - cXWindowSize / 2) + b / cScale);
+        x2 = cXWindowSize;
+        y2 = cYWindowSize / 2 - (a * (x2 - cXWindowSize / 2) + b / cScale);
+    }
+
+    else
+    {
+        y1 = cYWindowSize;
+        x1 = cXWindowSize / 2 - (y1 - cYWindowSize / 2 + b / cScale) / a;
+        y2 = 0;
+        x2 = cXWindowSize / 2 - (y2 - cYWindowSize / 2 + b / cScale) / a;
+    }
+
+    txLine(x1, y1, x2, y2);
+    return;
+}
+
+void DrawParabola(const Polynomial *const pp)
+{
+    ASSERT_POLYNOMIAL_CORRECT(*pp);
+
+    double a = pp->coefs[2];
+    double b = pp->coefs[1];
+    double c = pp->coefs[0];
+
+    if (EqualToZero(a))
+    {
+        DrawLinear(pp);
+        return;
+    }
+
+    double prevScreenX = 0;
+    double prevScreenY = GetParabolaY(pp, ScreenPosToValueX(prevScreenX));
+
+    for (double screenX = 1; screenX < cXWindowSize; ++screenX)
+    {
+        double valY = GetParabolaY(pp, ScreenPosToValueX(screenX));
+        double screenY = ValueToScreenPosY(valY);
+        printf("screenX: %lg, valY: %lg, screenY: %lg\n", screenX, valY, screenY);
+
+        if (screenY < cCompareEpsilon || screenY > cYWindowSize || screenX < 5 ||
+            screenX > cXWindowSize - 5) // why -5???
+        {
+            prevScreenX = screenX;
+            prevScreenY = screenY;
+            continue;
+        }
+
+        txLine(screenX, screenY, prevScreenX, prevScreenY);
+
+        prevScreenX = screenX;
+        prevScreenY = screenY;
+    }
+}
+
+double GetParabolaY(const Polynomial *const pp, double x)
+{
+    ASSERT_POLYNOMIAL_CORRECT(*pp);
+
+    double a = pp->coefs[2];
+    double b = pp->coefs[1];
+    double c = pp->coefs[0];
+
+    return a * x * x + b * x + c;
+}
+
+double ValueToScreenPosX(const double x)
+{
+    return x / cScale + (double)cXWindowSize / 2;
+}
+
+double ValueToScreenPosY(const double y)
+{
+    return -y / cScale + (double)cXWindowSize / 2;
+}
+
+double ScreenPosToValueX(const double x)
+{
+    return x * cScale - cXWindowSize * cScale / 2;
+}
+
+double ScreenPosToValueY(const double y)
+{
+    return -y * cScale + cYWindowSize * cScale / 2;
 }
