@@ -1,11 +1,7 @@
 #include "h/test.h"
 #include "h/colors.h"
-#include "h/errorHandle.h"
 #include "h/io.h"
-#include "h/limits.h"
 #include "h/solve.h"
-#include "h/utils.h"
-#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 

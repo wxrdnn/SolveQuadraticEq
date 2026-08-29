@@ -1,11 +1,14 @@
 #include "h/interface.h"
 #include "h/debug.h"
 #include "h/errorHandle.h"
+#include "h/graphing.h"
 #include "h/io.h"
 #include "h/limits.h"
 #include "h/solve.h"
 #include "h/test.h"
 #include "h/utils.h"
+#include <SDL2/SDL.h>
+#include <TXLin.h>
 #include <errno.h>
 #include <string.h>
 
@@ -124,11 +127,10 @@ Error LaunchProgram(const LaunchOptions *const lp)
         return LaunchTestMode();
 
     case mGraphing:
-        // return LaunchGraphingMode();
-        break;
+        return LaunchGraphingMode();
     }
 
-    return CreateError(ecSuccess, "");
+    // return CreateError(ecSuccess, "");
 }
 
 Error LaunchSolveSquareMode()
@@ -202,4 +204,12 @@ Error LaunchTestMode()
         RunSingleTest(pol, refRoots);
     }
     return error;
+}
+
+Error LaunchGraphingMode()
+{
+    InitGraph();
+
+    KeepWindowOpen();
+    return CreateError(ecSuccess, "");
 }

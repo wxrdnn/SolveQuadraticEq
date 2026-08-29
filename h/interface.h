@@ -45,6 +45,8 @@ Error LaunchSolveSquareMode();
 
 Error LaunchTestMode();
 
+Error LaunchGraphingMode();
+
 Error SolveCycle();
 
 #endif
