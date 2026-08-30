@@ -7,9 +7,6 @@
 #include "h/solve.h"
 #include "h/test.h"
 #include "h/utils.h"
-#include <SDL2/SDL.h>
-#include <TXLin.h>
-#include <cmath>
 #include <errno.h>
 #include <string.h>
 
@@ -208,20 +205,14 @@ Error LaunchTestMode()
 
 Error LaunchGraphingMode()
 {
+    Polynomial pol = {};
+    Error error = Get2DegreePolynomial(itKeyborad, &pol);
+    if (error.exitCode != ecSuccess)
+    {
+        return error;
+    }
+
     InitGraph();
-
-    Polynomial pol = {.coefs{0, 0, -2}, .coefsAmount = 3};
-    DrawFunction(&pol);
-
-    pol.coefs[0] = 2;
-    pol.coefs[1] = 2;
-    pol.coefsAmount = 2;
-    DrawFunction(&pol);
-
-    pol.coefs[0] = 2;
-    pol.coefs[1] = 4;
-    pol.coefs[2] = 2;
-    pol.coefsAmount = 3;
     DrawFunction(&pol);
 
     KeepWindowOpen();

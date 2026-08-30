@@ -5,7 +5,6 @@
 #include "h/limits.h"
 #include "h/solve.h"
 #include "h/utils.h"
-#include <cmath>
 #include <stdio.h>
 #include <sys/types.h>
 
