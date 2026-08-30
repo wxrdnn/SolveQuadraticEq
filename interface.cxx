@@ -212,8 +212,17 @@ Error LaunchGraphingMode()
 
     Polynomial pol = {.coefs{0, 0, -2}, .coefsAmount = 3};
     DrawFunction(&pol);
+
     pol.coefs[0] = 2;
     pol.coefs[1] = 2;
+    pol.coefsAmount = 2;
+    DrawFunction(&pol);
+
+    pol.coefs[0] = 2;
+    pol.coefs[1] = 4;
+    pol.coefs[2] = 2;
+    pol.coefsAmount = 3;
+    DrawFunction(&pol);
 
     KeepWindowOpen();
     return CreateError(ecSuccess, "");

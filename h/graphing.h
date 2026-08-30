@@ -23,6 +23,6 @@ void DrawLinear(const Polynomial *const pp);
 
 void DrawParabola(const Polynomial *const pp);
 
-double GetParabolaY(const Polynomial *const pp, double x);
+double GetParabolaValY(const Polynomial *const pp, double x);
 
 #endif

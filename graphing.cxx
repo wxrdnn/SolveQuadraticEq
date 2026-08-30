@@ -15,6 +15,7 @@ const unsigned cXDivisionsNumber = 10;
 const unsigned cYDivisionsNumber = 10;
 const unsigned cDivisionMarkLength = 20;
 const unsigned cFontSize = 40;
+const unsigned cWindowBorderOffset = 5;
 
 const double cScale = 0.00625; // FIXME
 
@@ -24,6 +25,8 @@ double ValueToScreenPosX(const double x);
 double ValueToScreenPosY(const double y);
 double ScreenPosToValueX(const double x);
 double ScreenPosToValueY(const double y);
+double GetLinearScreenY(const Polynomial *const pp, const double screenX);
+double GetParabolaScreenY(const Polynomial *const pp, const double screenX);
 
 void InitGraph()
 {
@@ -125,51 +128,44 @@ Error DrawFunction(const Polynomial *const pp)
     case 1:
     case 2:
         DrawLinear(pp);
+        break;
 
     case 3:
         DrawParabola(pp);
+        break;
 
     default:
         return CreateError(ecUnsupportedPolynomial, "");
+        break;
     }
+
+    return CreateError(ecSuccess, "`");
 }
 
 void DrawLinear(const Polynomial *const pp)
 {
     ASSERT(pp);
     ASSERT_POLYNOMIAL_CORRECT(*pp);
+    ASSERT(pp->coefsAmount < 3);
 
     double a = pp->coefs[1];
     double b = pp->coefs[0]; // y = ax + b
 
-    double x1 = 0;
-    double y1 = 0;
-    double x2 = 0;
-    double y2 = 0;
+    double screenX1 = 0;
+    double screenY1 = GetLinearScreenY(pp, screenX1);
 
-    if (abs(a) <= 1)
-    {
-        x1 = 0;
-        y1 = cYWindowSize / 2 - (a * (x1 - cXWindowSize / 2) + b / cScale);
-        x2 = cXWindowSize;
-        y2 = cYWindowSize / 2 - (a * (x2 - cXWindowSize / 2) + b / cScale);
-    }
+    double screenX2 = cXWindowSize;
+    double screenY2 = GetLinearScreenY(pp, screenX2);
 
-    else
-    {
-        y1 = cYWindowSize;
-        x1 = cXWindowSize / 2 - (y1 - cYWindowSize / 2 + b / cScale) / a;
-        y2 = 0;
-        x2 = cXWindowSize / 2 - (y2 - cYWindowSize / 2 + b / cScale) / a;
-    }
-
-    txLine(x1, y1, x2, y2);
+    txLine(screenX1, screenY1, screenX2, screenY2);
     return;
 }
 
 void DrawParabola(const Polynomial *const pp)
 {
+    ASSERT(pp);
     ASSERT_POLYNOMIAL_CORRECT(*pp);
+    ASSERT(pp->coefsAmount == 3);
 
     double a = pp->coefs[2];
     double b = pp->coefs[1];
@@ -182,16 +178,15 @@ void DrawParabola(const Polynomial *const pp)
     }
 
     double prevScreenX = 0;
-    double prevScreenY = GetParabolaY(pp, ScreenPosToValueX(prevScreenX));
+    double prevScreenY = GetParabolaScreenY(pp, prevScreenX);
 
     for (double screenX = 1; screenX < cXWindowSize; ++screenX)
     {
-        double valY = GetParabolaY(pp, ScreenPosToValueX(screenX));
-        double screenY = ValueToScreenPosY(valY);
-        printf("screenX: %lg, valY: %lg, screenY: %lg\n", screenX, valY, screenY);
+        double screenY = GetParabolaScreenY(pp, screenX);
+        // printf("screenX: %lg, valY: %lg, screenY: %lg\n", screenX, valY, screenY);
 
-        if (screenY < cCompareEpsilon || screenY > cYWindowSize || screenX < 5 ||
-            screenX > cXWindowSize - 5) // why -5???
+        if (screenY < cWindowBorderOffset || screenY > cYWindowSize - cWindowBorderOffset ||
+            screenX < cWindowBorderOffset || screenX > cXWindowSize - cWindowBorderOffset)
         {
             prevScreenX = screenX;
             prevScreenY = screenY;
@@ -205,7 +200,7 @@ void DrawParabola(const Polynomial *const pp)
     }
 }
 
-double GetParabolaY(const Polynomial *const pp, double x)
+double GetParabolaValY(const Polynomial *const pp, double valX)
 {
     ASSERT_POLYNOMIAL_CORRECT(*pp);
 
@@ -213,7 +208,7 @@ double GetParabolaY(const Polynomial *const pp, double x)
     double b = pp->coefs[1];
     double c = pp->coefs[0];
 
-    return a * x * x + b * x + c;
+    return a * valX * valX + b * valX + c;
 }
 
 double ValueToScreenPosX(const double x)
@@ -234,4 +229,28 @@ double ScreenPosToValueX(const double x)
 double ScreenPosToValueY(const double y)
 {
     return -y * cScale + cYWindowSize * cScale / 2;
+}
+
+double GetLinearScreenY(const Polynomial *const pp, const double screenX)
+{
+    ASSERT(pp);
+    ASSERT_POLYNOMIAL_CORRECT(*pp);
+    ASSERT(pp->coefsAmount >= 2);
+
+    double a = pp->coefs[1];
+    double b = pp->coefs[0];
+
+    double valX = ScreenPosToValueX(screenX);
+    double valY = a * valX + b;
+    return ValueToScreenPosY(valY);
+}
+
+double GetParabolaScreenY(const Polynomial *const pp, const double screenX)
+{
+    ASSERT(pp);
+    ASSERT_POLYNOMIAL_CORRECT(*pp);
+    ASSERT(pp->coefsAmount >= 3);
+
+    double valY = GetParabolaValY(pp, ScreenPosToValueX(screenX));
+    return ValueToScreenPosY(valY);
 }
